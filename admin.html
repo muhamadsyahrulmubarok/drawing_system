@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tournament Admin</title>
+		<link rel="stylesheet" href="styles.css" />
+		<style>
+			.admin-panel {
+				max-width: 1200px;
+				width: 90%;
+				margin: 0 auto;
+			}
+			.sport-selection {
+				margin-bottom: 30px;
+			}
+			select {
+				width: 100%;
+				padding: 12px;
+				font-size: 16px;
+				border: 1px solid #ddd;
+				border-radius: 4px;
+				background-color: white;
+			}
+			.team-inputs {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 15px;
+				margin-bottom: 20px;
+			}
+			.team-inputs input {
+				padding: 12px;
+				font-size: 16px;
+				border: 1px solid #ddd;
+				border-radius: 4px;
+			}
+			.match-inputs .match {
+				display: flex;
+				align-items: center;
+				width: 100%;
+				margin-bottom: 8px;
+				position: relative;
+			}
+			.match-inputs .match select {
+				flex: 1;
+				min-width: 0;
+			}
+			.match-inputs .match:not(:last-child)::after {
+				content: "";
+				display: block;
+				height: 2px;
+				width: 18px;
+				background: #ddd;
+				margin-left: 8px;
+				border-radius: 1px;
+				align-self: center;
+			}
+			.match-inputs .match:last-child::after {
+				display: none;
+			}
+			button {
+				width: 100%;
+				padding: 12px;
+				font-size: 16px;
+				background-color: #4caf50;
+				color: white;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				transition: background-color 0.3s;
+			}
+			button:hover {
+				background-color: #45a049;
+			}
+			.section-title {
+				margin-bottom: 15px;
+				color: #333;
+				font-size: 1.2em;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Tournament Admin</h1>
+			<div class="admin-panel">
+				<div class="sport-selection">
+					<h2 class="section-title">Select Sport</h2>
+					<select id="sportSelect" onchange="changeSport()">
+						<option value="Tarik Tambang">Tarik Tambang</option>
+						<option value="Lari Estafet">Lari Estafet</option>
+						<option value="Lari Sprint">Lari Sprint</option>
+						<option value="Badminton Ganda Putra">Badminton Ganda Putra</option>
+						<option value="Badminton Campuran">Badminton Campuran</option>
+						<option value="Futsal">Futsal</option>
+					</select>
+				</div>
+				<div class="team-selection">
+					<h2 class="section-title">Select Teams</h2>
+					<div class="team-inputs">
+						<select id="team1Input">
+							<option value="">Select Team 1</option>
+							<option value="Nusumma Jatim">Nusumma Jatim</option>
+							<option value="Nusumma Jateng">Nusumma Jateng</option>
+							<option value="Nusumma Jabar">Nusumma Jabar</option>
+							<option value="Nusumma Jogja">Nusumma Jogja</option>
+						</select>
+						<select id="team2Input">
+							<option value="">Select Team 2</option>
+							<option value="Nusumma Jatim">Nusumma Jatim</option>
+							<option value="Nusumma Jateng">Nusumma Jateng</option>
+							<option value="Nusumma Jabar">Nusumma Jabar</option>
+							<option value="Nusumma Jogja">Nusumma Jogja</option>
+						</select>
+						<select id="team3Input">
+							<option value="">Select Team 3</option>
+							<option value="Nusumma Jatim">Nusumma Jatim</option>
+							<option value="Nusumma Jateng">Nusumma Jateng</option>
+							<option value="Nusumma Jabar">Nusumma Jabar</option>
+							<option value="Nusumma Jogja">Nusumma Jogja</option>
+						</select>
+						<select id="team4Input">
+							<option value="">Select Team 4</option>
+							<option value="Nusumma Jatim">Nusumma Jatim</option>
+							<option value="Nusumma Jateng">Nusumma Jateng</option>
+							<option value="Nusumma Jabar">Nusumma Jabar</option>
+							<option value="Nusumma Jogja">Nusumma Jogja</option>
+						</select>
+					</div>
+					<button onclick="saveTeams()">Save Teams</button>
+				</div>
+				<div class="match-results">
+					<h2 class="section-title">Match Results</h2>
+					<div class="match-inputs">
+						<div class="match">
+							<select id="winner1">
+								<option value="">Select Winner of Match 1</option>
+							</select>
+						</div>
+						<div class="match">
+							<select id="winner2">
+								<option value="">Select Winner of Match 2</option>
+							</select>
+						</div>
+						<div class="match">
+							<select id="champion">
+								<option value="">Select Champion</option>
+							</select>
+						</div>
+					</div>
+					<button onclick="saveResults()">Save Results</button>
+				</div>
+			</div>
+		</div>
+		<script src="script.js" defer></script>
+	</body>
+</html>

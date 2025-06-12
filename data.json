@@ -1,0 +1,144 @@
+{
+	"sports": [
+		{
+			"name": "Tarik Tambang",
+			"brackets": [
+				{
+					"round": 1,
+					"matches": [
+						{
+							"team1": "",
+							"team2": ""
+						},
+						{
+							"team1": "",
+							"team2": ""
+						}
+					]
+				},
+				{
+					"round": 2,
+					"matches": [
+						{
+							"team1": "Winner 1",
+							"team2": "Winner 2"
+						}
+					]
+				},
+				{
+					"round": 3,
+					"matches": [
+						{
+							"team1": "Champion"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Badminton Ganda Putra",
+			"brackets": [
+				{
+					"round": 1,
+					"matches": [
+						{
+							"team1": "",
+							"team2": ""
+						},
+						{
+							"team1": "",
+							"team2": ""
+						}
+					]
+				},
+				{
+					"round": 2,
+					"matches": [
+						{
+							"team1": "Winner 1",
+							"team2": "Winner 2"
+						}
+					]
+				},
+				{
+					"round": 3,
+					"matches": [
+						{
+							"team1": "Champion"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Badminton Campuran",
+			"brackets": [
+				{
+					"round": 1,
+					"matches": [
+						{
+							"team1": "",
+							"team2": ""
+						},
+						{
+							"team1": "",
+							"team2": ""
+						}
+					]
+				},
+				{
+					"round": 2,
+					"matches": [
+						{
+							"team1": "Winner 1",
+							"team2": "Winner 2"
+						}
+					]
+				},
+				{
+					"round": 3,
+					"matches": [
+						{
+							"team1": "Champion"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Futsal",
+			"brackets": [
+				{
+					"round": 1,
+					"matches": [
+						{
+							"team1": "",
+							"team2": ""
+						},
+						{
+							"team1": "",
+							"team2": ""
+						}
+					]
+				},
+				{
+					"round": 2,
+					"matches": [
+						{
+							"team1": "Winner 1",
+							"team2": "Winner 2"
+						}
+					]
+				},
+				{
+					"round": 3,
+					"matches": [
+						{
+							"team1": "Champion"
+						}
+					]
+				}
+			]
+		}
+	]
+}
