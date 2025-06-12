@@ -1,4 +1,4 @@
-// Store tournament data in localStorage
+// Load tournament data from data.json
 let tournamentData = {
 	currentSport: "Tarik Tambang",
 	sports: {
@@ -37,38 +37,13 @@ let tournamentData = {
 	},
 };
 
-// Helper: Only keep allowed sports in tournamentData
-const allowedSports = Object.keys(tournamentData.sports);
-function cleanTournamentData() {
-	const savedData = localStorage.getItem("tournamentData");
-	if (savedData) {
-		const loaded = JSON.parse(savedData);
-		// Remove any sports not in allowedSports
-		Object.keys(loaded.sports).forEach((sport) => {
-			if (!allowedSports.includes(sport)) {
-				delete loaded.sports[sport];
-			}
-		});
-		// Add any missing sports
-		allowedSports.forEach((sport) => {
-			if (!loaded.sports[sport]) {
-				loaded.sports[sport] = JSON.parse(
-					JSON.stringify(tournamentData.sports[sport])
-				);
-			}
-		});
-		// Set currentSport to a valid one
-		if (!allowedSports.includes(loaded.currentSport)) {
-			loaded.currentSport = allowedSports[0];
-		}
-		tournamentData = loaded;
-		localStorage.setItem("tournamentData", JSON.stringify(tournamentData));
-	}
-}
-
 // Initialize the tournament data
 function initTournament() {
-	cleanTournamentData();
+	// Load data from localStorage if it exists
+	const savedData = localStorage.getItem("tournamentData");
+	if (savedData) {
+		tournamentData = JSON.parse(savedData);
+	}
 	updateDisplay();
 }
 
