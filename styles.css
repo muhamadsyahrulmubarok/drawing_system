@@ -192,13 +192,13 @@ button:hover {
 }
 
 /* Responsive adjustments */
-@media (max-width: 1100px) {
+/* @media (max-width: 1100px) {
 	.sport-section {
 		min-width: 300px;
 		max-width: 340px;
 	}
-}
-@media (max-width: 768px) {
+} */
+@media (max-width: 1100px) {
 	.sports-grid {
 		gap: 10px;
 	}
