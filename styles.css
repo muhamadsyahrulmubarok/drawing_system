@@ -203,8 +203,8 @@ button:hover {
 		gap: 10px;
 	}
 	.sport-section {
-		min-width: 220px;
-		max-width: 260px;
+		min-width: 300px;
+		max-width: 340px;
 	}
 	.bracket {
 		gap: 10px;
