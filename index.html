@@ -73,13 +73,13 @@
 				object-fit: cover;
 			}
 			.sports-grid {
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: center;
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
 				gap: 40px 40px;
 				width: 100%;
 				margin-top: 30px;
 				box-sizing: border-box;
+				justify-items: center;
 			}
 			.sport-title {
 				text-align: center;
