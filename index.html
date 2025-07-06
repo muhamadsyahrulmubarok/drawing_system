@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Turnamen PON 2025</title>
 		<!-- <link rel="stylesheet" href="index.css" /> -->
-		<link rel="stylesheet" href="orange.css" />
+		<link rel="stylesheet" href="index.css" />
 		<style>
 			body {
 				min-height: 100vh;
@@ -13,13 +13,14 @@
 				width: 100vw;
 				margin: 0;
 				overflow-x: auto;
-				background: linear-gradient(
-					135deg,
-					#ffb347 0%,
-					#ff9900 60%,
-					#ff7300 100%
-				);
-				/* Orange gradient for festive look */
+				background: radial-gradient(
+						ellipse at 60% 0%,
+						#23326e 0%,
+						#19204a 60%,
+						#0a1026 100%
+					),
+					linear-gradient(135deg, #23326e 0%, #0a1026 100%);
+				/* Deep blue gradient for high contrast with orange */
 			}
 			.container {
 				width: 100vw;
@@ -79,17 +80,17 @@
 			.sport-title {
 				text-align: center;
 				margin-bottom: 15px;
-				color: #ff7300;
+				color: #f3f6fa;
 				font-size: 1.2em;
-				text-shadow: 0 2px 4px rgba(255, 200, 80, 0.18);
+				text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 			}
 			.sport-section {
-				background: rgba(255, 255, 255, 0.85);
-				color: #ff7300;
+				background: rgba(20, 30, 60, 0.85);
+				color: #f3f6fa;
 				padding: 20px;
 				border-radius: 16px;
-				box-shadow: 0 2px 16px 0 rgba(255, 140, 0, 0.18);
-				border: 2px solid #ffb347;
+				box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.18);
+				border: 1.5px solid rgba(80, 120, 200, 0.18);
 				min-width: 350px;
 				max-width: 400px;
 				margin-bottom: 20px;
@@ -100,13 +101,13 @@
 			}
 			.sport-section:hover {
 				transform: translateY(-5px);
-				box-shadow: 0 4px 20px rgba(255, 140, 0, 0.25);
-				background: rgba(255, 255, 255, 0.95);
+				box-shadow: 0 4px 20px rgba(80, 120, 200, 0.25);
+				background: rgba(20, 30, 60, 0.95);
 			}
 			.match {
-				background: rgba(255, 200, 80, 0.13);
-				color: #ff7300;
-				border: 1px solid #ffb347;
+				background: rgba(255, 255, 255, 0.07);
+				color: #f3f6fa;
+				border: 1px solid rgba(120, 160, 255, 0.13);
 				border-radius: 8px;
 				padding: 12px;
 				min-width: 120px;
@@ -117,18 +118,18 @@
 				backdrop-filter: blur(5px);
 			}
 			.match.final {
-				background: rgba(255, 200, 80, 0.18);
-				border: 1px solid #ffb347;
+				background: rgba(80, 120, 200, 0.13);
+				border: 1px solid rgba(120, 160, 255, 0.2);
 			}
 			.match.champion {
-				background: #ffd700;
-				color: #ff7300;
+				background: rgba(80, 120, 200, 0.2);
+				color: #f3f6fa;
 				font-weight: bold;
-				border: 2px solid #ff7300;
+				border: 1px solid rgba(120, 160, 255, 0.3);
 			}
 			.team {
 				padding: 8px;
-				border-bottom: 1px solid rgba(255, 200, 80, 0.18);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 			}
 			.team:last-child {
 				border-bottom: none;
