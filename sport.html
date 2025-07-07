@@ -15,6 +15,25 @@
 				border-radius: 50%;
 				object-fit: cover;
 			}
+			.sport-link {
+				background: rgba(255, 140, 0, 0.15);
+				color: #f3f6fa;
+				text-decoration: none;
+				border: 1px solid rgba(255, 140, 0, 0.3);
+				border-radius: 8px;
+				padding: 10px 20px;
+				font-size: 1em;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				margin: 10px 0;
+				backdrop-filter: blur(5px);
+				display: inline-block;
+			}
+			.sport-link:hover {
+				background: rgba(255, 140, 0, 0.25);
+				transform: translateY(-2px);
+				box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
+			}
 		</style>
 	</head>
 	<body>
@@ -29,6 +48,9 @@
 			<div id="sportTitle" class="sport-title"></div>
 			<!-- <button id="refreshButton" class="refresh-button">Refresh Data</button> -->
 			<div id="bracketContainer"></div>
+			<div style="margin-top: 20px; display: flex; justify-content: center">
+				<a href="index.html" class="sport-link">Sport Brackets</a>
+			</div>
 		</div>
 		<script src="sport.js"></script>
 	</body>
