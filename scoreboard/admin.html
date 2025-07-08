@@ -679,7 +679,7 @@
 								type: "MD",
 								status: "LIVE",
 								player1: {
-									name: scores["c1-team1"] || "Nusumma Jateng",
+									name: scores["c1-team1"] || "",
 									scores: [
 										parseInt(scores["c1-score1-1"]) || 0,
 										parseInt(scores["c1-score1-2"]) || 0,
@@ -687,7 +687,7 @@
 									],
 								},
 								player2: {
-									name: scores["c1-team2"] || "Nusumma Jatim",
+									name: scores["c1-team2"] || "",
 									scores: [
 										parseInt(scores["c1-score2-1"]) || 0,
 										parseInt(scores["c1-score2-2"]) || 0,
@@ -704,7 +704,7 @@
 								type: "MD",
 								status: "LIVE",
 								player1: {
-									name: scores["c2-team1"] || "Nusumma Jogja",
+									name: scores["c2-team1"] || "",
 									scores: [
 										parseInt(scores["c2-score1-1"]) || 0,
 										parseInt(scores["c2-score1-2"]) || 0,
@@ -712,7 +712,7 @@
 									],
 								},
 								player2: {
-									name: scores["c2-team2"] || "Nusumma Jabar",
+									name: scores["c2-team2"] || "",
 									scores: [
 										parseInt(scores["c2-score2-1"]) || 0,
 										parseInt(scores["c2-score2-2"]) || 0,
@@ -729,7 +729,7 @@
 								type: "XD",
 								status: "LIVE",
 								player1: {
-									name: scores["c3-team1"] || "Nusumma Jateng",
+									name: scores["c3-team1"] || "",
 									scores: [
 										parseInt(scores["c3-score1-1"]) || 0,
 										parseInt(scores["c3-score1-2"]) || 0,
@@ -737,7 +737,7 @@
 									],
 								},
 								player2: {
-									name: scores["c3-team2"] || "Nusumma Jatim",
+									name: scores["c3-team2"] || "",
 									scores: [
 										parseInt(scores["c3-score2-1"]) || 0,
 										parseInt(scores["c3-score2-2"]) || 0,
@@ -754,7 +754,7 @@
 								type: "XD",
 								status: "LIVE",
 								player1: {
-									name: scores["c4-team1"] || "Nusumma Jogja",
+									name: scores["c4-team1"] || "",
 									scores: [
 										parseInt(scores["c4-score1-1"]) || 0,
 										parseInt(scores["c4-score1-2"]) || 0,
@@ -762,7 +762,7 @@
 									],
 								},
 								player2: {
-									name: scores["c4-team2"] || "Nusumma Jabar",
+									name: scores["c4-team2"] || "",
 									scores: [
 										parseInt(scores["c4-score2-1"]) || 0,
 										parseInt(scores["c4-score2-2"]) || 0,
@@ -811,7 +811,7 @@
 					method: "POST",
 					body: JSON.stringify(data),
 				});
-				alert("Data updated successfully!");
+				// alert("Data updated successfully!");
 				// Show instructions to manually update data.json
 				// const successMessage = document.getElementById("successMessage");
 				// successMessage.style.display = "block";
