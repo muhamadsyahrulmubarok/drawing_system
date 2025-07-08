@@ -806,7 +806,7 @@
 				// we'll store the updated data in localStorage and provide a way to copy it
 				const dataStr = JSON.stringify(data, null, 2);
 				localStorage.setItem("dataJsonContent", dataStr);
-
+				console.log(data);
 				fetch("action.php", {
 					method: "POST",
 					body: JSON.stringify(data),
