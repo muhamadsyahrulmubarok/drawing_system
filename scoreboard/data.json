@@ -1,0 +1,124 @@
+{
+    "players": [
+        "Nusumma Jateng",
+        "Nusumma Jatim",
+        "Nusumma Jogja",
+        "Nusumma Jabar"
+    ],
+    "courts": {
+        "c1": {
+            "courtNumber": 1,
+            "match": {
+                "type": "MD",
+                "status": "LIVE",
+                "player1": {
+                    "name": "Nusumma Jateng",
+                    "scores": [
+                        4,
+                        0,
+                        0
+                    ]
+                },
+                "player2": {
+                    "name": "Nusumma Jatim",
+                    "scores": [
+                        5,
+                        0,
+                        0
+                    ]
+                },
+                "winner": null,
+                "matchCompleted": false
+            }
+        },
+        "c2": {
+            "courtNumber": 2,
+            "match": {
+                "type": "MD",
+                "status": "LIVE",
+                "player1": {
+                    "name": "Nusumma Jogja",
+                    "scores": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "player2": {
+                    "name": "Nusumma Jabar",
+                    "scores": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "winner": null,
+                "matchCompleted": false
+            }
+        },
+        "c3": {
+            "courtNumber": 3,
+            "match": {
+                "type": "XD",
+                "status": "LIVE",
+                "player1": {
+                    "name": "Nusumma Jatim",
+                    "scores": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "player2": {
+                    "name": "Nusumma Jogja",
+                    "scores": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "winner": null,
+                "matchCompleted": false
+            }
+        },
+        "c4": {
+            "courtNumber": 4,
+            "match": {
+                "type": "XD",
+                "status": "LIVE",
+                "player1": {
+                    "name": "Nusumma Jateng",
+                    "scores": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "player2": {
+                    "name": "Nusumma Jabar",
+                    "scores": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                "winner": null,
+                "matchCompleted": false
+            }
+        }
+    },
+    "tournament": {
+        "name": "PON 2025",
+        "date": "2025-07-12",
+        "venue": "GOR UNY",
+        "totalCourts": 4,
+        "matchType": "MD & XD"
+    },
+    "statistics": {
+        "totalMatches": 4,
+        "completedMatches": 0,
+        "ongoingMatches": 4,
+        "playersInAction": 8
+    },
+    "lastUpdated": "2025-07-08T08:07:15.946Z"
+}

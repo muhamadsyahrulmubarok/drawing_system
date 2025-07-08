@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Admin Panel - Score Update</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: "Arial", sans-serif;
+				background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+				color: white;
+				min-height: 100vh;
+				padding: 20px;
+			}
+
+			.header {
+				text-align: center;
+				margin-bottom: 30px;
+			}
+
+			.header h1 {
+				font-size: 2.5em;
+				color: #ff4444;
+				margin-bottom: 10px;
+			}
+
+			.back-link {
+				display: inline-block;
+				background: #4caf50;
+				color: white;
+				padding: 10px 20px;
+				border-radius: 25px;
+				text-decoration: none;
+				font-weight: bold;
+				margin-bottom: 20px;
+				transition: background 0.3s ease;
+			}
+
+			.back-link:hover {
+				background: #45a049;
+			}
+
+			.courts-container {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 20px;
+				justify-content: center;
+				max-width: 1400px;
+				margin: 0 auto;
+			}
+
+			.court {
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 15px;
+				padding: 20px;
+				backdrop-filter: blur(10px);
+			}
+
+			.court-header {
+				text-align: center;
+				font-size: 1.5em;
+				margin-bottom: 20px;
+				color: #ff4444;
+				font-weight: bold;
+			}
+
+			.match-card {
+				background: rgba(0, 0, 0, 0.3);
+				border-radius: 10px;
+				padding: 20px;
+				margin-bottom: 20px;
+				border: 2px solid #333;
+			}
+
+			.match-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 15px;
+			}
+
+			.match-type {
+				background: #ff4444;
+				color: white;
+				padding: 5px 15px;
+				border-radius: 20px;
+				font-size: 0.9em;
+				font-weight: bold;
+			}
+
+			.team-section {
+				margin-bottom: 20px;
+			}
+
+			.team-name {
+				font-weight: bold;
+				font-size: 1.1em;
+				margin-bottom: 10px;
+				color: #ff4444;
+			}
+
+			.team-controls {
+				display: flex;
+				gap: 10px;
+				align-items: center;
+				margin-bottom: 15px;
+			}
+
+			.team-dropdown {
+				padding: 8px 12px;
+				background: #333;
+				color: white;
+				border: 1px solid #555;
+				border-radius: 5px;
+				font-size: 1em;
+				flex: 1;
+			}
+
+			.score-inputs {
+				display: flex;
+				gap: 10px;
+				align-items: center;
+			}
+
+			.score-input {
+				width: 60px;
+				padding: 8px;
+				background: #333;
+				color: white;
+				border: 1px solid #555;
+				border-radius: 5px;
+				text-align: center;
+				font-size: 1.1em;
+				font-weight: bold;
+			}
+
+			.score-input:focus {
+				outline: none;
+				border-color: #ff4444;
+			}
+
+			.set-label {
+				font-size: 0.9em;
+				color: #888;
+				margin-right: 5px;
+			}
+
+			.update-btn {
+				background: #4caf50;
+				color: white;
+				padding: 10px 20px;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				font-weight: bold;
+				transition: background 0.3s ease;
+				margin-top: 15px;
+			}
+
+			.update-btn:hover {
+				background: #45a049;
+			}
+
+			.update-all-btn {
+				background: #ff4444;
+				color: white;
+				padding: 15px 30px;
+				border: none;
+				border-radius: 25px;
+				cursor: pointer;
+				font-weight: bold;
+				font-size: 1.1em;
+				margin: 20px auto;
+				display: block;
+				transition: background 0.3s ease;
+			}
+
+			.update-all-btn:hover {
+				background: #cc3333;
+			}
+
+			.success-message {
+				background: #4caf50;
+				color: white;
+				padding: 10px;
+				border-radius: 5px;
+				margin-top: 10px;
+				text-align: center;
+				display: none;
+			}
+
+			@media (max-width: 768px) {
+				.courts-container {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<h1>Admin Panel</h1>
+			<p>Update Match Scores</p>
+			<a href="index.html" class="back-link">← Back to Scoreboard</a>
+		</div>
+
+		<div class="courts-container">
+			<!-- Court 1 -->
+			<div class="court">
+				<div class="court-header">Court 1</div>
+
+				<div class="match-card">
+					<div class="match-header">
+						<span class="match-type">MD</span>
+					</div>
+
+					<div class="team-section">
+						<div class="team-name">Team 1</div>
+						<div class="team-controls">
+							<select class="team-dropdown" id="c1-team1-select">
+								<option value="">Select Team</option>
+								<option value="Nusumma Jateng">Nusumma Jateng</option>
+								<option value="Nusumma Jatim">Nusumma Jatim</option>
+								<option value="Nusumma Jogja">Nusumma Jogja</option>
+								<option value="Nusumma Jabar">Nusumma Jabar</option>
+							</select>
+						</div>
+						<div class="score-inputs">
+							<span class="set-label">Set 1:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c1-score1-1"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 2:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c1-score1-2"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 3:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c1-score1-3"
+								min="0"
+								max="30"
+								value="0"
+							/>
+						</div>
+					</div>
+
+					<div class="team-section">
+						<div class="team-name">Team 2</div>
+						<div class="team-controls">
+							<select class="team-dropdown" id="c1-team2-select">
+								<option value="">Select Team</option>
+								<option value="Nusumma Jateng">Nusumma Jateng</option>
+								<option value="Nusumma Jatim">Nusumma Jatim</option>
+								<option value="Nusumma Jogja">Nusumma Jogja</option>
+								<option value="Nusumma Jabar">Nusumma Jabar</option>
+							</select>
+						</div>
+						<div class="score-inputs">
+							<span class="set-label">Set 1:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c1-score2-1"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 2:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c1-score2-2"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 3:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c1-score2-3"
+								min="0"
+								max="30"
+								value="0"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Court 2 -->
+			<div class="court">
+				<div class="court-header">Court 2</div>
+
+				<div class="match-card">
+					<div class="match-header">
+						<span class="match-type">MD</span>
+					</div>
+
+					<div class="team-section">
+						<div class="team-name">Team 1</div>
+						<div class="team-controls">
+							<select class="team-dropdown" id="c2-team1-select">
+								<option value="">Select Team</option>
+								<option value="Nusumma Jateng">Nusumma Jateng</option>
+								<option value="Nusumma Jatim">Nusumma Jatim</option>
+								<option value="Nusumma Jogja">Nusumma Jogja</option>
+								<option value="Nusumma Jabar">Nusumma Jabar</option>
+							</select>
+						</div>
+						<div class="score-inputs">
+							<span class="set-label">Set 1:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c2-score1-1"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 2:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c2-score1-2"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 3:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c2-score1-3"
+								min="0"
+								max="30"
+								value="0"
+							/>
+						</div>
+					</div>
+
+					<div class="team-section">
+						<div class="team-name">Team 2</div>
+						<div class="team-controls">
+							<select class="team-dropdown" id="c2-team2-select">
+								<option value="">Select Team</option>
+								<option value="Nusumma Jateng">Nusumma Jateng</option>
+								<option value="Nusumma Jatim">Nusumma Jatim</option>
+								<option value="Nusumma Jogja">Nusumma Jogja</option>
+								<option value="Nusumma Jabar">Nusumma Jabar</option>
+							</select>
+						</div>
+						<div class="score-inputs">
+							<span class="set-label">Set 1:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c2-score2-1"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 2:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c2-score2-2"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 3:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c2-score2-3"
+								min="0"
+								max="30"
+								value="0"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Court 3 -->
+			<div class="court">
+				<div class="court-header">Court 3</div>
+
+				<div class="match-card">
+					<div class="match-header">
+						<span class="match-type">XD</span>
+					</div>
+
+					<div class="team-section">
+						<div class="team-name">Team 1</div>
+						<div class="team-controls">
+							<select class="team-dropdown" id="c3-team1-select">
+								<option value="">Select Team</option>
+								<option value="Nusumma Jateng">Nusumma Jateng</option>
+								<option value="Nusumma Jatim">Nusumma Jatim</option>
+								<option value="Nusumma Jogja">Nusumma Jogja</option>
+								<option value="Nusumma Jabar">Nusumma Jabar</option>
+							</select>
+						</div>
+						<div class="score-inputs">
+							<span class="set-label">Set 1:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c3-score1-1"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 2:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c3-score1-2"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 3:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c3-score1-3"
+								min="0"
+								max="30"
+								value="0"
+							/>
+						</div>
+					</div>
+
+					<div class="team-section">
+						<div class="team-name">Team 2</div>
+						<div class="team-controls">
+							<select class="team-dropdown" id="c3-team2-select">
+								<option value="">Select Team</option>
+								<option value="Nusumma Jateng">Nusumma Jateng</option>
+								<option value="Nusumma Jatim">Nusumma Jatim</option>
+								<option value="Nusumma Jogja">Nusumma Jogja</option>
+								<option value="Nusumma Jabar">Nusumma Jabar</option>
+							</select>
+						</div>
+						<div class="score-inputs">
+							<span class="set-label">Set 1:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c3-score2-1"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 2:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c3-score2-2"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 3:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c3-score2-3"
+								min="0"
+								max="30"
+								value="0"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Court 4 -->
+			<div class="court">
+				<div class="court-header">Court 4</div>
+
+				<div class="match-card">
+					<div class="match-header">
+						<span class="match-type">XD</span>
+					</div>
+
+					<div class="team-section">
+						<div class="team-name">Team 1</div>
+						<div class="team-controls">
+							<select class="team-dropdown" id="c4-team1-select">
+								<option value="">Select Team</option>
+								<option value="Nusumma Jateng">Nusumma Jateng</option>
+								<option value="Nusumma Jatim">Nusumma Jatim</option>
+								<option value="Nusumma Jogja">Nusumma Jogja</option>
+								<option value="Nusumma Jabar">Nusumma Jabar</option>
+							</select>
+						</div>
+						<div class="score-inputs">
+							<span class="set-label">Set 1:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c4-score1-1"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 2:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c4-score1-2"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 3:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c4-score1-3"
+								min="0"
+								max="30"
+								value="0"
+							/>
+						</div>
+					</div>
+
+					<div class="team-section">
+						<div class="team-name">Team 2</div>
+						<div class="team-controls">
+							<select class="team-dropdown" id="c4-team2-select">
+								<option value="">Select Team</option>
+								<option value="Nusumma Jateng">Nusumma Jateng</option>
+								<option value="Nusumma Jatim">Nusumma Jatim</option>
+								<option value="Nusumma Jogja">Nusumma Jogja</option>
+								<option value="Nusumma Jabar">Nusumma Jabar</option>
+							</select>
+						</div>
+						<div class="score-inputs">
+							<span class="set-label">Set 1:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c4-score2-1"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 2:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c4-score2-2"
+								min="0"
+								max="30"
+								value="0"
+							/>
+							<span class="set-label">Set 3:</span>
+							<input
+								type="number"
+								class="score-input"
+								id="c4-score2-3"
+								min="0"
+								max="30"
+								value="0"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<button class="update-all-btn" onclick="updateAllScores()">
+			Update All Scores
+		</button>
+
+		<div class="success-message" id="successMessage">
+			Scores updated successfully!
+		</div>
+
+		<script>
+			// Function to load saved scores into the admin form
+			function loadSavedScores() {
+				const savedScores = localStorage.getItem("badmintonScores");
+				if (savedScores) {
+					const scores = JSON.parse(savedScores);
+
+					// Update all input fields and dropdowns
+					Object.keys(scores).forEach((key) => {
+						const element = document.getElementById(key);
+						if (element) {
+							if (element.tagName === "INPUT") {
+								element.value = scores[key];
+							} else if (element.tagName === "SELECT") {
+								element.value = scores[key];
+							}
+						}
+					});
+				}
+			}
+
+			// Function to update all scores
+			function updateAllScores() {
+				const scores = {};
+
+				// Get all team names and scores
+				const courts = ["c1", "c2", "c3", "c4"];
+
+				courts.forEach((court) => {
+					// Get team names
+					const team1Select = document.getElementById(`${court}-team1-select`);
+					const team2Select = document.getElementById(`${court}-team2-select`);
+
+					if (team1Select && team2Select) {
+						scores[`${court}-team1`] = team1Select.value;
+						scores[`${court}-team2`] = team2Select.value;
+					}
+
+					// Get scores for each set
+					for (let set = 1; set <= 3; set++) {
+						const score1Input = document.getElementById(
+							`${court}-score1-${set}`
+						);
+						const score2Input = document.getElementById(
+							`${court}-score2-${set}`
+						);
+
+						if (score1Input && score2Input) {
+							scores[`${court}-score1-${set}`] = score1Input.value;
+							scores[`${court}-score2-${set}`] = score2Input.value;
+						}
+					}
+				});
+
+				// Save to localStorage
+				localStorage.setItem("badmintonScores", JSON.stringify(scores));
+				// console.log(scores);
+				// Update data.json structure
+				updateDataJson(scores);
+
+				// Success message is now handled by updateDataJsonFile function
+			}
+
+			// Function to update data.json structure
+			function updateDataJson(scores) {
+				// Create the updated data structure
+				const updatedData = {
+					players: [
+						"Nusumma Jateng",
+						"Nusumma Jatim",
+						"Nusumma Jogja",
+						"Nusumma Jabar",
+					],
+					courts: {
+						c1: {
+							courtNumber: 1,
+							match: {
+								type: "MD",
+								status: "LIVE",
+								player1: {
+									name: scores["c1-team1"] || "Nusumma Jateng",
+									scores: [
+										parseInt(scores["c1-score1-1"]) || 0,
+										parseInt(scores["c1-score1-2"]) || 0,
+										parseInt(scores["c1-score1-3"]) || 0,
+									],
+								},
+								player2: {
+									name: scores["c1-team2"] || "Nusumma Jatim",
+									scores: [
+										parseInt(scores["c1-score2-1"]) || 0,
+										parseInt(scores["c1-score2-2"]) || 0,
+										parseInt(scores["c1-score2-3"]) || 0,
+									],
+								},
+								winner: null,
+								matchCompleted: false,
+							},
+						},
+						c2: {
+							courtNumber: 2,
+							match: {
+								type: "MD",
+								status: "LIVE",
+								player1: {
+									name: scores["c2-team1"] || "Nusumma Jogja",
+									scores: [
+										parseInt(scores["c2-score1-1"]) || 0,
+										parseInt(scores["c2-score1-2"]) || 0,
+										parseInt(scores["c2-score1-3"]) || 0,
+									],
+								},
+								player2: {
+									name: scores["c2-team2"] || "Nusumma Jabar",
+									scores: [
+										parseInt(scores["c2-score2-1"]) || 0,
+										parseInt(scores["c2-score2-2"]) || 0,
+										parseInt(scores["c2-score2-3"]) || 0,
+									],
+								},
+								winner: null,
+								matchCompleted: false,
+							},
+						},
+						c3: {
+							courtNumber: 3,
+							match: {
+								type: "XD",
+								status: "LIVE",
+								player1: {
+									name: scores["c3-team1"] || "Nusumma Jateng",
+									scores: [
+										parseInt(scores["c3-score1-1"]) || 0,
+										parseInt(scores["c3-score1-2"]) || 0,
+										parseInt(scores["c3-score1-3"]) || 0,
+									],
+								},
+								player2: {
+									name: scores["c3-team2"] || "Nusumma Jatim",
+									scores: [
+										parseInt(scores["c3-score2-1"]) || 0,
+										parseInt(scores["c3-score2-2"]) || 0,
+										parseInt(scores["c3-score2-3"]) || 0,
+									],
+								},
+								winner: null,
+								matchCompleted: false,
+							},
+						},
+						c4: {
+							courtNumber: 4,
+							match: {
+								type: "XD",
+								status: "LIVE",
+								player1: {
+									name: scores["c4-team1"] || "Nusumma Jogja",
+									scores: [
+										parseInt(scores["c4-score1-1"]) || 0,
+										parseInt(scores["c4-score1-2"]) || 0,
+										parseInt(scores["c4-score1-3"]) || 0,
+									],
+								},
+								player2: {
+									name: scores["c4-team2"] || "Nusumma Jabar",
+									scores: [
+										parseInt(scores["c4-score2-1"]) || 0,
+										parseInt(scores["c4-score2-2"]) || 0,
+										parseInt(scores["c4-score2-3"]) || 0,
+									],
+								},
+								winner: null,
+								matchCompleted: false,
+							},
+						},
+					},
+					tournament: {
+						name: "PON 2025",
+						date: "2025-07-12",
+						venue: "GOR UNY",
+						totalCourts: 4,
+						matchType: "MD & XD",
+					},
+					statistics: {
+						totalMatches: 4,
+						completedMatches: 0,
+						ongoingMatches: 4,
+						playersInAction: 8,
+					},
+					lastUpdated: new Date().toISOString(),
+				};
+				console.log(updatedData);
+				// Store the updated data in localStorage
+				localStorage.setItem(
+					"updatedDataJson",
+					JSON.stringify(updatedData, null, 2)
+				);
+
+				// Update the actual data.json file
+				updateDataJsonFile(updatedData);
+			}
+
+			// Function to update data.json file
+			function updateDataJsonFile(data) {
+				// Since we can't directly write to files from client-side JavaScript,
+				// we'll store the updated data in localStorage and provide a way to copy it
+				const dataStr = JSON.stringify(data, null, 2);
+				localStorage.setItem("dataJsonContent", dataStr);
+
+				fetch("action.php", {
+					method: "POST",
+					body: JSON.stringify(data),
+				});
+				// Show instructions to manually update data.json
+				// const successMessage = document.getElementById("successMessage");
+				// successMessage.style.display = "block";
+				// successMessage.innerHTML = `
+				// 	Data updated successfully!<br>
+				// 	To update data.json file:<br>
+				// 	1. Open browser console (F12)<br>
+				// 	2. Type: copy(localStorage.getItem('dataJsonContent'))<br>
+				// 	3. Paste the content into data.json file
+				// `;
+
+				// setTimeout(() => {
+				// 	successMessage.style.display = "none";
+				// }, 8000);
+			}
+
+			// Function to load data from data.json
+			function loadDataFromJson() {
+				fetch("data.json")
+					.then((response) => response.json())
+					.then((data) => {
+						// Update form with data from data.json
+						const courts = ["c1", "c2", "c3", "c4"];
+
+						courts.forEach((court) => {
+							const courtData = data.courts[court];
+							if (courtData) {
+								const match = courtData.match;
+
+								// Update team selections
+								const team1Select = document.getElementById(
+									`${court}-team1-select`
+								);
+								const team2Select = document.getElementById(
+									`${court}-team2-select`
+								);
+
+								if (team1Select) team1Select.value = match.player1.name;
+								if (team2Select) team2Select.value = match.player2.name;
+
+								// Update scores
+								for (let set = 1; set <= 3; set++) {
+									const score1Input = document.getElementById(
+										`${court}-score1-${set}`
+									);
+									const score2Input = document.getElementById(
+										`${court}-score2-${set}`
+									);
+
+									if (score1Input)
+										score1Input.value = match.player1.scores[set - 1];
+									if (score2Input)
+										score2Input.value = match.player2.scores[set - 1];
+								}
+							}
+						});
+					})
+					.catch((error) => {
+						console.error("Error loading data.json:", error);
+					});
+			}
+
+			// Function to validate scores
+			function validateScores() {
+				const inputs = document.querySelectorAll(".score-input");
+				inputs.forEach((input) => {
+					input.addEventListener("input", function () {
+						let value = parseInt(this.value);
+						if (isNaN(value) || value < 0) {
+							this.value = 0;
+						} else if (value > 30) {
+							this.value = 30;
+						}
+					});
+				});
+			}
+
+			// Function to prevent duplicate team selection
+			function preventDuplicateTeams() {
+				const courts = ["c1", "c2", "c3", "c4"];
+
+				courts.forEach((court) => {
+					const team1Select = document.getElementById(`${court}-team1-select`);
+					const team2Select = document.getElementById(`${court}-team2-select`);
+
+					if (team1Select && team2Select) {
+						team1Select.addEventListener("change", function () {
+							if (this.value === team2Select.value) {
+								// Find next available team
+								const options = Array.from(team2Select.options);
+								const availableOption = options.find(
+									(option) => option.value !== this.value
+								);
+								if (availableOption) {
+									team2Select.value = availableOption.value;
+								}
+							}
+							// Update data.json when team selection changes
+							updateDataJsonOnTeamChange();
+						});
+
+						team2Select.addEventListener("change", function () {
+							if (this.value === team1Select.value) {
+								// Find next available team
+								const options = Array.from(team1Select.options);
+								const availableOption = options.find(
+									(option) => option.value !== this.value
+								);
+								if (availableOption) {
+									team1Select.value = availableOption.value;
+								}
+							}
+							// Update data.json when team selection changes
+							updateDataJsonOnTeamChange();
+						});
+					}
+				});
+			}
+
+			// Auto-save functionality
+			function setupAutoSave() {
+				const inputs = document.querySelectorAll(
+					".score-input, .team-dropdown"
+				);
+				inputs.forEach((input) => {
+					input.addEventListener("change", function () {
+						// Auto-save after 1 second of inactivity
+						clearTimeout(window.autoSaveTimeout);
+						window.autoSaveTimeout = setTimeout(() => {
+							updateAllScores();
+						}, 1000);
+					});
+				});
+			}
+
+			// Function to update data.json immediately when team selection changes
+			function updateDataJsonOnTeamChange() {
+				const courts = ["c1", "c2", "c3", "c4"];
+				const scores = {};
+
+				courts.forEach((court) => {
+					// Get team names
+					const team1Select = document.getElementById(`${court}-team1-select`);
+					const team2Select = document.getElementById(`${court}-team2-select`);
+
+					if (team1Select && team2Select) {
+						scores[`${court}-team1`] = team1Select.value;
+						scores[`${court}-team2`] = team2Select.value;
+					}
+
+					// Get scores for each set
+					for (let set = 1; set <= 3; set++) {
+						const score1Input = document.getElementById(
+							`${court}-score1-${set}`
+						);
+						const score2Input = document.getElementById(
+							`${court}-score2-${set}`
+						);
+
+						if (score1Input && score2Input) {
+							scores[`${court}-score1-${set}`] = score1Input.value;
+							scores[`${court}-score2-${set}`] = score2Input.value;
+						}
+					}
+				});
+
+				// Update data.json structure immediately
+				updateDataJson(scores);
+			}
+
+			// Keyboard shortcuts
+			function setupKeyboardShortcuts() {
+				document.addEventListener("keydown", function (e) {
+					// Ctrl+S to save
+					if (e.ctrlKey && e.key === "s") {
+						e.preventDefault();
+						updateAllScores();
+					}
+
+					// Ctrl+R to reset (reload saved scores)
+					if (e.ctrlKey && e.key === "r") {
+						e.preventDefault();
+						loadSavedScores();
+					}
+				});
+			}
+
+			// Initialize everything when page loads
+			document.addEventListener("DOMContentLoaded", function () {
+				loadDataFromJson(); // Load from data.json first
+				loadSavedScores(); // Then load any saved changes
+				validateScores();
+				preventDuplicateTeams();
+				setupAutoSave();
+				setupKeyboardShortcuts();
+
+				// Add event listeners for team selection changes
+				setupTeamChangeListeners();
+			});
+
+			// Function to setup team change listeners
+			function setupTeamChangeListeners() {
+				const courts = ["c1", "c2", "c3", "c4"];
+
+				courts.forEach((court) => {
+					const team1Select = document.getElementById(`${court}-team1-select`);
+					const team2Select = document.getElementById(`${court}-team2-select`);
+
+					if (team1Select) {
+						team1Select.addEventListener("change", function () {
+							// Update data.json when team selection changes
+							updateDataJsonOnTeamChange();
+						});
+					}
+
+					if (team2Select) {
+						team2Select.addEventListener("change", function () {
+							// Update data.json when team selection changes
+							updateDataJsonOnTeamChange();
+						});
+					}
+				});
+			}
+		</script>
+	</body>
+</html>

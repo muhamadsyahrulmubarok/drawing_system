@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Live Match Scoreboard</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: "Arial", sans-serif;
+				background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+				color: white;
+				min-height: 100vh;
+				padding: 20px;
+			}
+
+			.header {
+				text-align: center;
+				margin-bottom: 30px;
+			}
+
+			.header h1 {
+				font-size: 2.5em;
+				color: #ff4444;
+				margin-bottom: 10px;
+			}
+
+			.courts-container {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 20px;
+				justify-content: center;
+				max-width: 1400px;
+				margin: 0 auto;
+			}
+
+			.court {
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 15px;
+				padding: 20px;
+				backdrop-filter: blur(10px);
+			}
+
+			.court-header {
+				text-align: center;
+				font-size: 1.5em;
+				margin-bottom: 20px;
+				color: #ff4444;
+				font-weight: bold;
+			}
+
+			.match-card {
+				background: rgba(0, 0, 0, 0.3);
+				border-radius: 10px;
+				padding: 20px;
+				margin-bottom: 20px;
+				position: relative;
+				border: 2px solid transparent;
+				transition: all 0.3s ease;
+			}
+
+			.match-card:hover {
+				border-color: #ff4444;
+				transform: translateY(-2px);
+			}
+
+			.match-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 15px;
+			}
+
+			.match-type {
+				background: #ff4444;
+				color: white;
+				padding: 5px 15px;
+				border-radius: 20px;
+				font-size: 0.9em;
+				font-weight: bold;
+			}
+
+			.match-status {
+				background: #4caf50;
+				color: white;
+				padding: 5px 10px;
+				border-radius: 5px;
+				font-size: 0.8em;
+			}
+
+			.players {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.player-row {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 10px;
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 8px;
+			}
+
+			.player-info {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.player-name {
+				font-weight: bold;
+				font-size: 1.1em;
+			}
+
+			.scores {
+				display: flex;
+				gap: 10px;
+				align-items: center;
+			}
+
+			.score {
+				background: #333;
+				color: white;
+				padding: 8px 12px;
+				border-radius: 5px;
+				font-weight: bold;
+				font-size: 1.2em;
+				min-width: 40px;
+				text-align: center;
+			}
+
+			.score.winning {
+				background: #4caf50;
+				color: white;
+			}
+
+			.vs {
+				font-size: 1.2em;
+				color: #888;
+				margin: 0 10px;
+			}
+
+			.admin-link {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				background: #ff4444;
+				color: white;
+				padding: 10px 20px;
+				border-radius: 25px;
+				text-decoration: none;
+				font-weight: bold;
+				transition: background 0.3s ease;
+			}
+
+			.admin-link:hover {
+				background: #cc3333;
+			}
+
+			@media (max-width: 768px) {
+				.courts-container {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<h1>Live Match Scoreboard</h1>
+			<p>PON 2025 - GOR UNY</p>
+		</div>
+
+		<div class="courts-container">
+			<!-- Court 1 -->
+			<div class="court">
+				<div class="court-header">Court 1</div>
+
+				<div class="match-card">
+					<div class="match-header">
+						<span class="match-type">MD</span>
+						<span class="match-status">LIVE</span>
+					</div>
+					<div class="players">
+						<div class="player-row">
+							<div class="player-info">
+								<span class="player-name" id="c1-team1">Nusumma Jateng</span>
+							</div>
+							<div class="scores">
+								<span class="score" id="c1-score1-1">21</span>
+								<span class="score" id="c1-score1-2">18</span>
+								<span class="score" id="c1-score1-3">21</span>
+							</div>
+						</div>
+						<div class="vs">VS</div>
+						<div class="player-row">
+							<div class="player-info">
+								<span class="player-name" id="c1-team2">Nusumma Jatim</span>
+							</div>
+							<div class="scores">
+								<span class="score" id="c1-score2-1">19</span>
+								<span class="score" id="c1-score2-2">21</span>
+								<span class="score" id="c1-score2-3">15</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Court 2 -->
+			<div class="court">
+				<div class="court-header">Court 2</div>
+
+				<div class="match-card">
+					<div class="match-header">
+						<span class="match-type">MD</span>
+						<span class="match-status">LIVE</span>
+					</div>
+					<div class="players">
+						<div class="player-row">
+							<div class="player-info">
+								<span class="player-name" id="c2-team1">Nusumma Jogja</span>
+							</div>
+							<div class="scores">
+								<span class="score" id="c2-score1-1">21</span>
+								<span class="score" id="c2-score1-2">16</span>
+								<span class="score" id="c2-score1-3">21</span>
+							</div>
+						</div>
+						<div class="vs">VS</div>
+						<div class="player-row">
+							<div class="player-info">
+								<span class="player-name" id="c2-team2">Nusumma Jabar</span>
+							</div>
+							<div class="scores">
+								<span class="score" id="c2-score2-1">19</span>
+								<span class="score" id="c2-score2-2">21</span>
+								<span class="score" id="c2-score2-3">18</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Court 3 -->
+			<div class="court">
+				<div class="court-header">Court 3</div>
+
+				<div class="match-card">
+					<div class="match-header">
+						<span class="match-type">XD</span>
+						<span class="match-status">LIVE</span>
+					</div>
+					<div class="players">
+						<div class="player-row">
+							<div class="player-info">
+								<span class="player-name" id="c3-team1">Nusumma Jateng</span>
+							</div>
+							<div class="scores">
+								<span class="score" id="c3-score1-1">15</span>
+								<span class="score" id="c3-score1-2">21</span>
+								<span class="score" id="c3-score1-3">21</span>
+							</div>
+						</div>
+						<div class="vs">VS</div>
+						<div class="player-row">
+							<div class="player-info">
+								<span class="player-name" id="c3-team2">Nusumma Jatim</span>
+							</div>
+							<div class="scores">
+								<span class="score" id="c3-score2-1">21</span>
+								<span class="score" id="c3-score2-2">18</span>
+								<span class="score" id="c3-score2-3">15</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Court 4 -->
+			<div class="court">
+				<div class="court-header">Court 4</div>
+
+				<div class="match-card">
+					<div class="match-header">
+						<span class="match-type">XD</span>
+						<span class="match-status">LIVE</span>
+					</div>
+					<div class="players">
+						<div class="player-row">
+							<div class="player-info">
+								<span class="player-name" id="c4-team1">Nusumma Jogja</span>
+							</div>
+							<div class="scores">
+								<span class="score" id="c4-score1-1">21</span>
+								<span class="score" id="c4-score1-2">21</span>
+								<span class="score" id="c4-score1-3">0</span>
+							</div>
+						</div>
+						<div class="vs">VS</div>
+						<div class="player-row">
+							<div class="player-info">
+								<span class="player-name" id="c4-team2">Nusumma Jabar</span>
+							</div>
+							<div class="scores">
+								<span class="score" id="c4-score2-1">18</span>
+								<span class="score" id="c4-score2-2">19</span>
+								<span class="score" id="c4-score2-3">0</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<a href="admin.html" class="admin-link">Admin Panel</a>
+
+		<script>
+			// Function to update winning scores highlight
+			function updateWinningScores() {
+				const courts = ["c1", "c2", "c3", "c4"];
+
+				courts.forEach((court) => {
+					for (let set = 1; set <= 3; set++) {
+						const score1 = document.getElementById(`${court}-score1-${set}`);
+						const score2 = document.getElementById(`${court}-score2-${set}`);
+
+						if (score1 && score2) {
+							const val1 = parseInt(score1.textContent);
+							const val2 = parseInt(score2.textContent);
+
+							// Reset classes
+							score1.classList.remove("winning");
+							score2.classList.remove("winning");
+
+							// Highlight winning score for completed sets
+							if (val1 >= 21 && val1 > val2 && val1 - val2 >= 2) {
+								score1.classList.add("winning");
+							} else if (val2 >= 21 && val2 > val1 && val2 - val1 >= 2) {
+								score2.classList.add("winning");
+							}
+						}
+					}
+				});
+			}
+
+			// Function to load data from data.json
+			function loadDataFromJson() {
+				fetch("data.json")
+					.then((response) => response.json())
+					.then((data) => {
+						// Update tournament info
+						if (data.tournament) {
+							const headerSubtitle = document.querySelector(".header p");
+							if (headerSubtitle) {
+								headerSubtitle.textContent = `${data.tournament.name} - ${data.tournament.venue}`;
+							}
+						}
+
+						// Update all courts data
+						const courts = ["c1", "c2", "c3", "c4"];
+
+						courts.forEach((court) => {
+							const courtData = data.courts[court];
+							if (courtData) {
+								const match = courtData.match;
+
+								// Update team names
+								const team1Element = document.getElementById(`${court}-team1`);
+								const team2Element = document.getElementById(`${court}-team2`);
+
+								if (team1Element) team1Element.textContent = match.player1.name;
+								if (team2Element) team2Element.textContent = match.player2.name;
+
+								// Update scores
+								for (let set = 1; set <= 3; set++) {
+									const score1Element = document.getElementById(
+										`${court}-score1-${set}`
+									);
+									const score2Element = document.getElementById(
+										`${court}-score2-${set}`
+									);
+
+									if (score1Element)
+										score1Element.textContent = match.player1.scores[set - 1];
+									if (score2Element)
+										score2Element.textContent = match.player2.scores[set - 1];
+								}
+							}
+						});
+
+						updateWinningScores();
+					})
+					.catch((error) => {
+						console.error("Error loading data.json:", error);
+						// Fallback to localStorage if data.json fails
+						loadScoresFromLocalStorage();
+					});
+			}
+
+			// Function to load scores from localStorage (fallback)
+			function loadScoresFromLocalStorage() {
+				const savedScores = localStorage.getItem("badmintonScores");
+				if (savedScores) {
+					const scores = JSON.parse(savedScores);
+
+					// Update all score elements
+					Object.keys(scores).forEach((key) => {
+						const element = document.getElementById(key);
+						if (element) {
+							element.textContent = scores[key];
+						}
+					});
+
+					updateWinningScores();
+				}
+			}
+
+			// Function to load scores (combines both sources)
+			function loadScores() {
+				// Try to load from data.json first, then localStorage as fallback
+				loadDataFromJson();
+			}
+
+			// Load scores on page load
+			loadScores();
+
+			// Auto-refresh scores every 1 second
+			setInterval(loadScores, 1000);
+		</script>
+	</body>
+</html>
