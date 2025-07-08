@@ -789,7 +789,7 @@
 					},
 					lastUpdated: new Date().toISOString(),
 				};
-				console.log(updatedData);
+				// console.log(updatedData);
 				// Store the updated data in localStorage
 				localStorage.setItem(
 					"updatedDataJson",
@@ -811,6 +811,7 @@
 					method: "POST",
 					body: JSON.stringify(data),
 				});
+				alert("Data updated successfully!");
 				// Show instructions to manually update data.json
 				// const successMessage = document.getElementById("successMessage");
 				// successMessage.style.display = "block";
