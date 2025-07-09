@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ceremony Admin - Edit Winners</title>
+		<style>
+			body {
+				min-height: 100vh;
+				margin: 0;
+				font-family: "Segoe UI", Arial, sans-serif;
+				background: radial-gradient(
+					circle at 50% 20%,
+					#23326e 0%,
+					#0a1026 100%
+				);
+				color: #fff;
+			}
+			.container {
+				max-width: 600px;
+				margin: 40px auto;
+				background: rgba(20, 30, 60, 0.85);
+				border-radius: 18px;
+				box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+				padding: 32px 24px;
+			}
+			h1 {
+				text-align: center;
+				margin-bottom: 24px;
+			}
+			.winner-section {
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 12px;
+				padding: 20px;
+				margin-bottom: 20px;
+				border-left: 4px solid #ffd700;
+			}
+			.winner-section.second {
+				border-left-color: #c0c0c0;
+			}
+			.winner-section.third {
+				border-left-color: #cd7f32;
+			}
+			.winner-header {
+				display: flex;
+				align-items: center;
+				margin-bottom: 15px;
+			}
+			.medal-icon {
+				font-size: 1.5rem;
+				margin-right: 10px;
+			}
+			.place-title {
+				font-size: 1.2rem;
+				font-weight: bold;
+				color: #ffd700;
+			}
+			.input-group {
+				display: flex;
+				gap: 10px;
+				align-items: flex-end;
+			}
+			.input-field {
+				flex: 1;
+			}
+			label {
+				display: block;
+				font-weight: 500;
+				margin-bottom: 6px;
+				font-size: 0.9rem;
+			}
+			input[type="text"] {
+				width: 100%;
+				padding: 10px 12px;
+				border-radius: 6px;
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				background: rgba(255, 255, 255, 0.1);
+				color: #fff;
+				font-size: 1rem;
+				box-sizing: border-box;
+			}
+			input[type="text"]:focus {
+				outline: none;
+				border-color: #ffd700;
+				background: rgba(255, 255, 255, 0.15);
+			}
+			.save-btn {
+				background: #ffd700;
+				color: #23326e;
+				font-weight: bold;
+				border: none;
+				border-radius: 6px;
+				padding: 10px 20px;
+				font-size: 0.9rem;
+				cursor: pointer;
+				transition: all 0.2s;
+				white-space: nowrap;
+			}
+			.save-btn:hover {
+				background: #fff;
+				transform: translateY(-1px);
+			}
+			.save-btn:disabled {
+				background: #666;
+				cursor: not-allowed;
+				transform: none;
+			}
+			.save-btn.saving {
+				background: #4caf50;
+				color: white;
+			}
+			.status-message {
+				margin-top: 8px;
+				font-size: 0.85rem;
+				min-height: 20px;
+			}
+			.status-success {
+				color: #4caf50;
+			}
+			.status-error {
+				color: #f44336;
+			}
+			.sport-select-container {
+				text-align: center;
+				margin-bottom: 30px;
+			}
+			select {
+				font-size: 1.1rem;
+				padding: 10px 20px;
+				border-radius: 8px;
+				border: none;
+				background: #23326e;
+				color: #ffd700;
+				font-weight: bold;
+				cursor: pointer;
+			}
+			select:focus {
+				outline: none;
+				box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+			}
+			.back-link {
+				display: block;
+				text-align: center;
+				margin-top: 30px;
+				color: #ffd700;
+				text-decoration: none;
+				font-weight: 500;
+			}
+			.back-link:hover {
+				color: #fff;
+			}
+			@media (max-width: 600px) {
+				.input-group {
+					flex-direction: column;
+					gap: 15px;
+				}
+				.save-btn {
+					width: 100%;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Edit Winners</h1>
+			<div class="sport-select-container">
+				<select id="sportSelect">
+					<option>Tarik Tambang</option>
+					<option>Badminton Ganda Putra</option>
+					<option>Badminton Ganda Campura</option>
+					<option>Futsal</option>
+					<option>Lari Sprint</option>
+					<option>Lari Estafet</option>
+				</select>
+			</div>
+
+			<!-- 1st Place Section -->
+			<div class="winner-section">
+				<div class="winner-header">
+					<span class="medal-icon">🥇</span>
+					<span class="place-title">1st Place Winner</span>
+				</div>
+				<div class="input-group">
+					<div class="input-field">
+						<label for="firstName">Winner Name</label>
+						<input
+							type="text"
+							id="firstName"
+							placeholder="Enter 1st place winner name"
+						/>
+					</div>
+					<button
+						class="save-btn"
+						id="saveFirst"
+						onclick="saveWinner('1st', 'firstName')"
+					>
+						Save 1st Place
+					</button>
+				</div>
+				<div class="status-message" id="statusFirst"></div>
+			</div>
+
+			<!-- 2nd Place Section -->
+			<div class="winner-section second">
+				<div class="winner-header">
+					<span class="medal-icon">🥈</span>
+					<span class="place-title">2nd Place Winner</span>
+				</div>
+				<div class="input-group">
+					<div class="input-field">
+						<label for="secondName">Winner Name</label>
+						<input
+							type="text"
+							id="secondName"
+							placeholder="Enter 2nd place winner name"
+						/>
+					</div>
+					<button
+						class="save-btn"
+						id="saveSecond"
+						onclick="saveWinner('2nd', 'secondName')"
+					>
+						Save 2nd Place
+					</button>
+				</div>
+				<div class="status-message" id="statusSecond"></div>
+			</div>
+
+			<!-- 3rd Place Section -->
+			<div class="winner-section third">
+				<div class="winner-header">
+					<span class="medal-icon">🥉</span>
+					<span class="place-title">3rd Place Winner</span>
+				</div>
+				<div class="input-group">
+					<div class="input-field">
+						<label for="thirdName">Winner Name</label>
+						<input
+							type="text"
+							id="thirdName"
+							placeholder="Enter 3rd place winner name"
+						/>
+					</div>
+					<button
+						class="save-btn"
+						id="saveThird"
+						onclick="saveWinner('3rd', 'thirdName')"
+					>
+						Save 3rd Place
+					</button>
+				</div>
+				<div class="status-message" id="statusThird"></div>
+			</div>
+
+			<a href="index.html" class="back-link">&larr; Back to Ceremony List</a>
+		</div>
+
+		<script>
+			const sportSelect = document.getElementById("sportSelect");
+			const sportList = [
+				"Tarik Tambang",
+				"Badminton Ganda Putra",
+				"Badminton Ganda Campura",
+				"Futsal",
+				"Lari Sprint",
+				"Lari Estafet",
+			];
+
+			async function getData() {
+				try {
+					const res = await fetch("action.php?action=read");
+					return await res.json();
+				} catch (error) {
+					console.error("Error fetching data:", error);
+					return null;
+				}
+			}
+
+			async function setData(data) {
+				try {
+					await fetch("action.php?action=write", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					});
+					return true;
+				} catch (error) {
+					console.error("Error saving data:", error);
+					return false;
+				}
+			}
+
+			async function loadWinners() {
+				const data = await getData();
+				if (!data) return;
+
+				const sport = sportSelect.value;
+				const winners = data[sport] || {
+					"1st": { name: "" },
+					"2nd": { name: "" },
+					"3rd": { name: "" },
+				};
+
+				document.getElementById("firstName").value = winners["1st"].name || "";
+				document.getElementById("secondName").value = winners["2nd"].name || "";
+				document.getElementById("thirdName").value = winners["3rd"].name || "";
+
+				// Clear status messages
+				clearStatusMessages();
+			}
+
+			async function saveWinner(place, inputId) {
+				const input = document.getElementById(inputId);
+				const winnerName = input.value.trim();
+
+				// Map place to button and status IDs
+				const placeMap = {
+					"1st": { buttonId: "saveFirst", statusId: "statusFirst" },
+					"2nd": { buttonId: "saveSecond", statusId: "statusSecond" },
+					"3rd": { buttonId: "saveThird", statusId: "statusThird" },
+				};
+
+				const saveBtn = document.getElementById(placeMap[place].buttonId);
+				const statusElement = document.getElementById(placeMap[place].statusId);
+
+				// Validate input
+				if (!winnerName) {
+					showStatus(statusElement, "Please enter a winner name", "error");
+					return;
+				}
+
+				// Update button state
+				saveBtn.disabled = true;
+				saveBtn.classList.add("saving");
+				saveBtn.textContent = "Saving...";
+
+				try {
+					// Get current data
+					const data = await getData();
+					if (!data) {
+						throw new Error("Failed to load current data");
+					}
+
+					const sport = sportSelect.value;
+
+					// Initialize sport if it doesn't exist
+					if (!data[sport]) {
+						data[sport] = {
+							"1st": { name: "" },
+							"2nd": { name: "" },
+							"3rd": { name: "" },
+						};
+					}
+
+					// Update the specific place
+					data[sport][place] = { name: winnerName };
+
+					// Save the data
+					const success = await setData(data);
+
+					if (success) {
+						showStatus(
+							statusElement,
+							`${place} place winner saved successfully!`,
+							"success"
+						);
+						// Clear status after 3 seconds
+						setTimeout(() => {
+							clearStatus(statusElement);
+						}, 3000);
+					} else {
+						throw new Error("Failed to save data");
+					}
+				} catch (error) {
+					console.error("Error saving winner:", error);
+					showStatus(
+						statusElement,
+						"Error saving winner. Please try again.",
+						"error"
+					);
+				} finally {
+					// Reset button state
+					saveBtn.disabled = false;
+					saveBtn.classList.remove("saving");
+					saveBtn.textContent = `Save ${place} Place`;
+				}
+			}
+
+			function showStatus(element, message, type) {
+				element.textContent = message;
+				element.className = `status-message status-${type}`;
+			}
+
+			function clearStatus(element) {
+				element.textContent = "";
+				element.className = "status-message";
+			}
+
+			function clearStatusMessages() {
+				document.querySelectorAll(".status-message").forEach((element) => {
+					clearStatus(element);
+				});
+			}
+
+			// Event listeners
+			sportSelect.addEventListener("change", loadWinners);
+
+			// Allow saving on Enter key
+			document
+				.getElementById("firstName")
+				.addEventListener("keypress", function (e) {
+					if (e.key === "Enter") {
+						saveWinner("1st", "firstName");
+					}
+				});
+
+			document
+				.getElementById("secondName")
+				.addEventListener("keypress", function (e) {
+					if (e.key === "Enter") {
+						saveWinner("2nd", "secondName");
+					}
+				});
+
+			document
+				.getElementById("thirdName")
+				.addEventListener("keypress", function (e) {
+					if (e.key === "Enter") {
+						saveWinner("3rd", "thirdName");
+					}
+				});
+
+			// Initialize on load
+			loadWinners();
+		</script>
+	</body>
+</html>

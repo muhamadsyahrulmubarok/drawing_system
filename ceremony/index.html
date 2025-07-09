@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ceremony Podium</title>
+		<style>
+			body {
+				min-height: 100vh;
+				margin: 0;
+				font-family: "Segoe UI", Arial, sans-serif;
+				background: radial-gradient(
+					circle at 50% 20%,
+					#23326e 0%,
+					#0a1026 100%
+				);
+				color: #fff;
+			}
+			.container {
+				max-width: 1100px;
+				margin: 40px auto;
+				background: rgba(20, 30, 60, 0.85);
+				border-radius: 18px;
+				box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+				padding: 32px 24px;
+			}
+			h1 {
+				text-align: center;
+				margin-bottom: 12px;
+				letter-spacing: 2px;
+				font-size: 2.5rem;
+			}
+			.ceremony-title {
+				text-align: center;
+				font-size: 1.3rem;
+				margin-bottom: 30px;
+				letter-spacing: 1px;
+			}
+			.sport-select {
+				display: flex;
+				justify-content: center;
+				margin-bottom: 24px;
+			}
+			select {
+				font-size: 1.5rem;
+				padding: 12px 24px;
+				border: none;
+				background: transparent;
+				color: #ffd700;
+				font-weight: bold;
+				text-align: center;
+				cursor: pointer;
+				appearance: none;
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				outline: none;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+				transition: all 0.3s ease;
+			}
+			select:hover {
+				color: #fff;
+				text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+			}
+			select option {
+				background: #23326e;
+				color: #ffd700;
+				font-size: 1.2rem;
+			}
+			.podium {
+				display: flex;
+				justify-content: center;
+				align-items: flex-end;
+				gap: 40px;
+				margin-top: 40px;
+			}
+			.place {
+				background: rgba(255, 255, 255, 0.08);
+				border-radius: 16px;
+				box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.25);
+				text-align: center;
+				padding: 24px 18px 18px 18px;
+				position: relative;
+				min-width: 220px;
+				transition: background 0.2s;
+			}
+			.place .medal {
+				font-size: 2.5rem;
+				margin-bottom: 8px;
+				display: block;
+			}
+			.place .rank {
+				font-size: 1.5rem;
+				font-weight: bold;
+				margin-bottom: 8px;
+			}
+			.place .winner-photo {
+				width: 90px;
+				height: 90px;
+				object-fit: cover;
+				border-radius: 50%;
+				border: 3px solid #ffd700;
+				margin-bottom: 10px;
+				background: #fff;
+			}
+			.place .winner-name {
+				font-size: 1.2rem;
+				font-weight: 600;
+				margin-bottom: 4px;
+			}
+			.place .winner-team {
+				font-size: 1rem;
+				color: #ffd700;
+				margin-bottom: 4px;
+			}
+			.place .winner-score {
+				font-size: 1rem;
+				color: #fff;
+			}
+			.place.first {
+				background: rgba(255, 215, 0, 0.18);
+				border: 2px solid #ffd700;
+				min-height: 340px;
+				z-index: 2;
+			}
+			.place.second {
+				background: rgba(192, 192, 192, 0.18);
+				border: 2px solid #c0c0c0;
+				min-height: 260px;
+				z-index: 1;
+			}
+			.place.third {
+				background: rgba(205, 127, 50, 0.18);
+				border: 2px solid #cd7f32;
+				min-height: 200px;
+				z-index: 1;
+			}
+
+			/* Winner Modal Styles */
+			.modal-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.8);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				z-index: 1000;
+				opacity: 0;
+				visibility: hidden;
+				transition: all 0.3s ease;
+			}
+			.modal-overlay.show {
+				opacity: 1;
+				visibility: visible;
+			}
+			.winner-modal {
+				background: linear-gradient(135deg, #23326e 0%, #0a1026 100%);
+				border-radius: 20px;
+				padding: 40px;
+				text-align: center;
+				max-width: 500px;
+				width: 90%;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+				border: 3px solid #ffd700;
+				transform: scale(0.7);
+				transition: transform 0.3s ease;
+			}
+			.modal-overlay.show .winner-modal {
+				transform: scale(1);
+			}
+			.winner-modal h2 {
+				color: #ffd700;
+				font-size: 2.5rem;
+				margin-bottom: 20px;
+				text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+			}
+			.winner-modal .winner-name {
+				font-size: 2rem;
+				font-weight: bold;
+				margin-bottom: 15px;
+				color: #fff;
+			}
+			.winner-modal .sport-name {
+				font-size: 1.3rem;
+				color: #ffd700;
+				margin-bottom: 10px;
+			}
+			.winner-modal .place-info {
+				font-size: 1.1rem;
+				color: #fff;
+				margin-bottom: 25px;
+				font-style: italic;
+			}
+			.winner-modal .medal-icon {
+				font-size: 4rem;
+				margin-bottom: 20px;
+				display: block;
+			}
+			.close-modal {
+				background: #ffd700;
+				color: #23326e;
+				border: none;
+				padding: 12px 30px;
+				font-size: 1.1rem;
+				font-weight: bold;
+				border-radius: 25px;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				margin-top: 20px;
+			}
+			.close-modal:hover {
+				background: #fff;
+				transform: scale(1.05);
+			}
+
+			@media (max-width: 900px) {
+				.podium {
+					flex-direction: column-reverse;
+					align-items: center;
+					gap: 18px;
+				}
+				.place {
+					min-width: 0;
+					width: 90%;
+				}
+				.winner-modal {
+					padding: 30px 20px;
+				}
+				.winner-modal h2 {
+					font-size: 2rem;
+				}
+				.winner-modal .winner-name {
+					font-size: 1.5rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>PON CEREMONY</h1>
+			<div class="ceremony-title">PEKAN OLAHRAGA NASIONAL - WINNER PODIUM</div>
+			<div class="sport-select">
+				<select id="sportSelect">
+					<option>Tarik Tambang</option>
+					<option>Badminton Ganda Putra</option>
+					<option>Badminton Ganda Campura</option>
+					<option>Futsal</option>
+					<option>Lari Sprint</option>
+					<option>Lari Estafet</option>
+				</select>
+			</div>
+			<div class="podium">
+				<div class="place second">
+					<span class="medal">🥈</span>
+					<div class="rank">2ND</div>
+					<img
+						class="winner-photo"
+						id="secondPhoto"
+						src=""
+						alt=""
+						style="display: none"
+					/>
+					<div class="winner-name" id="secondName">-</div>
+				</div>
+				<div class="place first">
+					<span class="medal">🥇</span>
+					<div class="rank">1ST</div>
+					<img
+						class="winner-photo"
+						id="firstPhoto"
+						src=""
+						alt=""
+						style="display: none"
+					/>
+					<div class="winner-name" id="firstName">-</div>
+				</div>
+				<div class="place third">
+					<span class="medal">🥉</span>
+					<div class="rank">3RD</div>
+					<img
+						class="winner-photo"
+						id="thirdPhoto"
+						src=""
+						alt=""
+						style="display: none"
+					/>
+					<div class="winner-name" id="thirdName">-</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Winner Modal -->
+		<div class="modal-overlay" id="winnerModal">
+			<div class="winner-modal">
+				<span class="medal-icon" id="modalMedalIcon">🏆</span>
+				<h2 id="modalTitle">CONGRATULATIONS!</h2>
+				<div class="winner-name" id="modalWinnerName"></div>
+				<div class="sport-name" id="modalSportName"></div>
+				<div class="place-info" id="modalPlaceInfo"></div>
+				<button class="close-modal" onclick="closeWinnerModal()">Close</button>
+			</div>
+		</div>
+
+		<!-- Confetti Script -->
+		<script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+
+		<script>
+			const sportSelect = document.getElementById("sportSelect");
+			const sportList = [
+				"Tarik Tambang",
+				"Badminton Ganda Putra",
+				"Badminton Ganda Campura",
+				"Futsal",
+				"Lari Sprint",
+				"Lari Estafet",
+			];
+
+			let previousData = null;
+			let autoRefreshInterval = null;
+
+			async function getData() {
+				try {
+					const res = await fetch("action.php?action=read");
+					return await res.json();
+				} catch (error) {
+					console.error("Error fetching data:", error);
+					return null;
+				}
+			}
+
+			function setWinner(place, winner) {
+				document.getElementById(place + "Name").textContent =
+					winner.name || "-";
+				// If you want to support photos, add a photo property to data.json
+				if (winner.photo) {
+					const img = document.getElementById(place + "Photo");
+					img.src = winner.photo;
+					img.style.display = "block";
+				} else {
+					document.getElementById(place + "Photo").style.display = "none";
+				}
+			}
+
+			function showWinnerModal(winnerName, sportName, place) {
+				// Set different content based on place
+				const modalConfig = {
+					"1st": {
+						medalIcon: "🥇",
+						title: "CHAMPION!",
+						placeInfo: "🏆 GOLD MEDAL WINNER 🏆",
+					},
+					"2nd": {
+						medalIcon: "🥈",
+						title: "SILVER ACHIEVEMENT!",
+						placeInfo: "🥈 SILVER MEDAL WINNER 🥈",
+					},
+					"3rd": {
+						medalIcon: "🥉",
+						title: "BRONZE SUCCESS!",
+						placeInfo: "🥉 BRONZE MEDAL WINNER 🥉",
+					},
+				};
+
+				const config = modalConfig[place];
+
+				document.getElementById("modalMedalIcon").textContent =
+					config.medalIcon;
+				document.getElementById("modalTitle").textContent = config.title;
+				document.getElementById("modalWinnerName").textContent = winnerName;
+				document.getElementById("modalSportName").textContent = sportName;
+				document.getElementById("modalPlaceInfo").textContent =
+					config.placeInfo;
+				document.getElementById("winnerModal").classList.add("show");
+
+				// Trigger confetti with different colors based on place
+				const confettiColors = {
+					"1st": ["#FFD700", "#FFA500", "#FF6B35"],
+					"2nd": ["#C0C0C0", "#E5E4E2", "#B8B8B8"],
+					"3rd": ["#CD7F32", "#D2691E", "#B8860B"],
+				};
+
+				confetti({
+					particleCount: 100,
+					spread: 70,
+					origin: { y: 0.6 },
+					colors: confettiColors[place],
+				});
+
+				// Auto close modal after 5 seconds
+				setTimeout(() => {
+					closeWinnerModal();
+				}, 5000);
+			}
+
+			function closeWinnerModal() {
+				document.getElementById("winnerModal").classList.remove("show");
+			}
+
+			function checkForChanges(newData) {
+				if (!previousData) {
+					previousData = newData;
+					return;
+				}
+
+				const currentSport = sportSelect.value;
+				const currentWinners = newData[currentSport];
+				const previousWinners = previousData[currentSport];
+
+				if (!currentWinners || !previousWinners) return;
+
+				// Check for changes in all three places
+				const places = ["1st", "2nd", "3rd"];
+
+				places.forEach((place) => {
+					if (
+						currentWinners[place] &&
+						previousWinners[place] &&
+						currentWinners[place].name !== previousWinners[place].name &&
+						currentWinners[place].name !== "-" &&
+						currentWinners[place].name !== ""
+					) {
+						// Add a small delay between modals if multiple places change
+						setTimeout(() => {
+							showWinnerModal(currentWinners[place].name, currentSport, place);
+						}, places.indexOf(place) * 1000); // 1 second delay between each modal
+					}
+				});
+
+				previousData = newData;
+			}
+
+			async function loadPodium() {
+				const data = await getData();
+				if (!data) return;
+
+				const sport = sportSelect.value;
+				const winners = data[sport] || {
+					"1st": { name: "-" },
+					"2nd": { name: "-" },
+					"3rd": { name: "-" },
+				};
+
+				setWinner("first", winners["1st"]);
+				setWinner("second", winners["2nd"]);
+				setWinner("third", winners["3rd"]);
+
+				// Check for changes
+				checkForChanges(data);
+			}
+
+			function startAutoRefresh() {
+				// Clear existing interval if any
+				if (autoRefreshInterval) {
+					clearInterval(autoRefreshInterval);
+				}
+
+				// Start new interval - refresh every 1 second
+				autoRefreshInterval = setInterval(loadPodium, 1000);
+			}
+
+			function stopAutoRefresh() {
+				if (autoRefreshInterval) {
+					clearInterval(autoRefreshInterval);
+					autoRefreshInterval = null;
+				}
+			}
+
+			// Event listeners
+			sportSelect.addEventListener("change", () => {
+				loadPodium();
+			});
+
+			// Close modal when clicking outside
+			document.getElementById("winnerModal").addEventListener("click", (e) => {
+				if (e.target.classList.contains("modal-overlay")) {
+					closeWinnerModal();
+				}
+			});
+
+			// Initialize
+			loadPodium();
+			startAutoRefresh();
+
+			// Cleanup on page unload
+			window.addEventListener("beforeunload", stopAutoRefresh);
+		</script>
+	</body>
+</html>
