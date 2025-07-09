@@ -37,14 +37,220 @@ let tournamentData = {
 	},
 };
 
+// Store previous data for comparison
+let previousData = JSON.parse(JSON.stringify(tournamentData));
+
 // Initialize the tournament data
 function initTournament() {
 	// Load data from localStorage if it exists
 	const savedData = localStorage.getItem("tournamentData");
 	if (savedData) {
 		tournamentData = JSON.parse(savedData);
+		previousData = JSON.parse(JSON.stringify(tournamentData));
 	}
 	updateDisplay();
+}
+
+// Function to detect changes and find updated team names
+function detectChanges(newData) {
+	const changes = [];
+
+	// Check each sport
+	Object.keys(newData.sports).forEach((sportName) => {
+		const newSport = newData.sports[sportName];
+		const oldSport = previousData.sports[sportName];
+
+		// Check teams
+		newSport.teams.forEach((team, index) => {
+			if (team && team !== oldSport.teams[index]) {
+				changes.push({
+					type: "team",
+					name: team,
+					sport: sportName,
+					position: `Team ${index + 1}`,
+				});
+			}
+		});
+
+		// Check winners
+		Object.keys(newSport.winners).forEach((winnerKey) => {
+			if (
+				newSport.winners[winnerKey] &&
+				newSport.winners[winnerKey] !== oldSport.winners[winnerKey]
+			) {
+				changes.push({
+					type: "winner",
+					name: newSport.winners[winnerKey],
+					sport: sportName,
+					position:
+						winnerKey === "final"
+							? "Champion"
+							: `Winner ${winnerKey.replace("match", "")}`,
+				});
+			}
+		});
+	});
+
+	return changes;
+}
+
+// Function to show modal with confetti
+function showUpdateModal(changes) {
+	if (changes.length === 0) return;
+
+	// Create modal if it doesn't exist
+	let modal = document.getElementById("updateModal");
+	if (!modal) {
+		modal = document.createElement("div");
+		modal.id = "updateModal";
+		modal.className = "modal-overlay";
+		modal.innerHTML = `
+			<div class="modal-content">
+				<div class="modal-title">🎉 Tim Terpilih! 🎉</div>
+				<div class="modal-team" id="modalTeamName"></div>
+				<div class="modal-message"></div>
+				<button class="modal-close" onclick="closeModal()">Close</button>
+			</div>
+		`;
+		document.body.appendChild(modal);
+
+		// Add modal styles if they don't exist
+		if (!document.getElementById("modalStyles")) {
+			const style = document.createElement("style");
+			style.id = "modalStyles";
+			style.textContent = `
+				.modal-overlay {
+					position: fixed;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: rgba(0, 0, 0, 0.7);
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					z-index: 1000;
+					opacity: 0;
+					visibility: hidden;
+					transition: all 0.3s ease;
+				}
+				
+				.modal-overlay.show {
+					opacity: 1;
+					visibility: visible;
+				}
+				
+				.modal-content {
+					background: linear-gradient(135deg, #23326e 0%, #0a1026 100%);
+					border: 2px solid rgba(255, 140, 0, 0.5);
+					border-radius: 16px;
+					padding: 30px;
+					text-align: center;
+					max-width: 400px;
+					width: 90%;
+					transform: scale(0.7);
+					transition: transform 0.3s ease;
+					box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+				}
+				
+				.modal-overlay.show .modal-content {
+					transform: scale(1);
+				}
+				
+				.modal-title {
+					color: #ffd700;
+					font-size: 1.5em;
+					font-weight: bold;
+					margin-bottom: 10px;
+					text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+				}
+				
+				.modal-team {
+					color: #f3f6fa;
+					font-size: 2em;
+					font-weight: bold;
+					margin: 20px 0;
+					text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+					animation: pulse 1.5s infinite;
+				}
+				
+				@keyframes pulse {
+					0% { transform: scale(1); }
+					50% { transform: scale(1.05); }
+					100% { transform: scale(1); }
+				}
+				
+				.modal-message {
+					color: #ccc;
+					font-size: 1.1em;
+					margin-bottom: 20px;
+				}
+				
+				.modal-close {
+					background: rgba(255, 140, 0, 0.2);
+					color: #f3f6fa;
+					border: 1px solid rgba(255, 140, 0, 0.5);
+					border-radius: 8px;
+					padding: 10px 20px;
+					font-size: 1em;
+					cursor: pointer;
+					transition: all 0.3s ease;
+				}
+				
+				.modal-close:hover {
+					background: rgba(255, 140, 0, 0.3);
+					transform: translateY(-2px);
+				}
+			`;
+			document.head.appendChild(style);
+		}
+	}
+
+	const modalTeamName = document.getElementById("modalTeamName");
+
+	// Show the first change (or combine multiple)
+	const change = changes[0];
+	modalTeamName.textContent = change.name;
+
+	// Show modal
+	modal.classList.add("show");
+
+	// Trigger confetti if confetti function exists
+	if (typeof confetti !== "undefined") {
+		triggerConfetti();
+	}
+
+	// Auto-hide modal after 5 seconds
+	setTimeout(() => {
+		closeModal();
+	}, 5000);
+}
+
+// Function to trigger confetti
+function triggerConfetti() {
+	if (typeof confetti !== "undefined") {
+		confetti({
+			particleCount: 100,
+			spread: 70,
+			origin: { y: 0.6 },
+			colors: [
+				"#ffd700",
+				"#ff6b6b",
+				"#4ecdc4",
+				"#45b7d1",
+				"#96ceb4",
+				"#feca57",
+			],
+		});
+	}
+}
+
+// Function to close modal
+function closeModal() {
+	const modal = document.getElementById("updateModal");
+	if (modal) {
+		modal.classList.remove("show");
+	}
 }
 
 // Change sport in admin panel
@@ -251,8 +457,20 @@ function startAutoUpdate() {
 		if (savedData) {
 			const newData = JSON.parse(savedData);
 			if (JSON.stringify(newData) !== JSON.stringify(tournamentData)) {
+				// Detect changes before updating
+				const changes = detectChanges(newData);
+
+				// Update the data
 				tournamentData = newData;
 				updateDisplay();
+
+				// Show modal if there are changes
+				if (changes.length > 0) {
+					showUpdateModal(changes);
+				}
+
+				// Update previous data for next comparison
+				previousData = JSON.parse(JSON.stringify(tournamentData));
 			}
 		}
 	}, 1000);
@@ -264,3 +482,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	initTournament();
 	startAutoUpdate();
 });
+
+// Make closeModal function globally available
+window.closeModal = closeModal;

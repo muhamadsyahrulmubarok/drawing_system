@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Sport Bracket Viewer</title>
 		<link rel="stylesheet" href="sport.css" />
+		<script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 		<style>
 			.logo img {
 				height: 70px;
@@ -34,6 +35,96 @@
 				transform: translateY(-2px);
 				box-shadow: 0 2px 8px rgba(255, 140, 0, 0.2);
 			}
+
+			/* Modal Styles */
+			.modal-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.7);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				z-index: 1000;
+				opacity: 0;
+				visibility: hidden;
+				transition: all 0.3s ease;
+			}
+
+			.modal-overlay.show {
+				opacity: 1;
+				visibility: visible;
+			}
+
+			.modal-content {
+				background: linear-gradient(135deg, #23326e 0%, #0a1026 100%);
+				border: 2px solid rgba(255, 140, 0, 0.5);
+				border-radius: 16px;
+				padding: 30px;
+				text-align: center;
+				max-width: 400px;
+				width: 90%;
+				transform: scale(0.7);
+				transition: transform 0.3s ease;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+			}
+
+			.modal-overlay.show .modal-content {
+				transform: scale(1);
+			}
+
+			.modal-title {
+				color: #ffd700;
+				font-size: 1.5em;
+				font-weight: bold;
+				margin-bottom: 10px;
+				text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+			}
+
+			.modal-team {
+				color: #f3f6fa;
+				font-size: 2em;
+				font-weight: bold;
+				margin: 20px 0;
+				text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+				animation: pulse 1.5s infinite;
+			}
+
+			@keyframes pulse {
+				0% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.05);
+				}
+				100% {
+					transform: scale(1);
+				}
+			}
+
+			.modal-message {
+				color: #ccc;
+				font-size: 1.1em;
+				margin-bottom: 20px;
+			}
+
+			.modal-close {
+				background: rgba(255, 140, 0, 0.2);
+				color: #f3f6fa;
+				border: 1px solid rgba(255, 140, 0, 0.5);
+				border-radius: 8px;
+				padding: 10px 20px;
+				font-size: 1em;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.modal-close:hover {
+				background: rgba(255, 140, 0, 0.3);
+				transform: translateY(-2px);
+			}
 		</style>
 	</head>
 	<body>
@@ -52,6 +143,17 @@
 				<a href="index.html" class="sport-link">Sport Brackets</a>
 			</div>
 		</div>
+
+		<!-- Modal for updates -->
+		<div id="updateModal" class="modal-overlay">
+			<div class="modal-content">
+				<div class="modal-title">🎉 Tim Terpilih! 🎉</div>
+				<div class="modal-team" id="modalTeamName"></div>
+				<div class="modal-message"></div>
+				<button class="modal-close" onclick="closeModal()">Close</button>
+			</div>
+		</div>
+
 		<script src="sport.js"></script>
 		<script>
 			// make 67% zoom display

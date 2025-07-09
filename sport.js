@@ -43,12 +43,16 @@ let tournamentData = {
 	},
 };
 
+// Store previous data for comparison
+let previousData = JSON.parse(JSON.stringify(tournamentData));
+
 // Initialize the tournament data
 function initTournament() {
 	// Load data from localStorage if it exists
 	const savedData = localStorage.getItem("tournamentData");
 	if (savedData) {
 		tournamentData = JSON.parse(savedData);
+		previousData = JSON.parse(JSON.stringify(tournamentData));
 	}
 	updateDisplay();
 }
@@ -101,6 +105,88 @@ function updateDisplay() {
 	bracketDiv.innerHTML = html;
 }
 
+// Function to detect changes and find updated team names
+function detectChanges(newData) {
+	const changes = [];
+
+	// Check each sport
+	Object.keys(newData.sports).forEach((sportName) => {
+		const newSport = newData.sports[sportName];
+		const oldSport = previousData.sports[sportName];
+
+		// Check teams
+		newSport.teams.forEach((team, index) => {
+			if (team && team !== oldSport.teams[index]) {
+				changes.push({
+					type: "team",
+					name: team,
+					sport: sportName,
+					position: `Team ${index + 1}`,
+				});
+			}
+		});
+
+		// Check winners
+		Object.keys(newSport.winners).forEach((winnerKey) => {
+			if (
+				newSport.winners[winnerKey] &&
+				newSport.winners[winnerKey] !== oldSport.winners[winnerKey]
+			) {
+				changes.push({
+					type: "winner",
+					name: newSport.winners[winnerKey],
+					sport: sportName,
+					position:
+						winnerKey === "final"
+							? "Champion"
+							: `Winner ${winnerKey.replace("match", "")}`,
+				});
+			}
+		});
+	});
+
+	return changes;
+}
+
+// Function to show modal with confetti
+function showUpdateModal(changes) {
+	if (changes.length === 0) return;
+
+	const modal = document.getElementById("updateModal");
+	const modalTeamName = document.getElementById("modalTeamName");
+
+	// Show the first change (or combine multiple)
+	const change = changes[0];
+	modalTeamName.textContent = change.name;
+
+	// Show modal
+	modal.classList.add("show");
+
+	// Trigger confetti
+	triggerConfetti();
+
+	// Auto-hide modal after 5 seconds
+	setTimeout(() => {
+		closeModal();
+	}, 5000);
+}
+
+// Function to trigger confetti
+function triggerConfetti() {
+	confetti({
+		particleCount: 100,
+		spread: 70,
+		origin: { y: 0.6 },
+		colors: ["#ffd700", "#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"],
+	});
+}
+
+// Function to close modal
+function closeModal() {
+	const modal = document.getElementById("updateModal");
+	modal.classList.remove("show");
+}
+
 // Handle keyboard navigation
 function handleKey(e) {
 	if (e.key === "ArrowRight") {
@@ -126,8 +212,20 @@ function startAutoUpdate() {
 		if (savedData) {
 			const newData = JSON.parse(savedData);
 			if (JSON.stringify(newData) !== JSON.stringify(tournamentData)) {
+				// Detect changes before updating
+				const changes = detectChanges(newData);
+
+				// Update the data
 				tournamentData = newData;
 				updateDisplay();
+
+				// Show modal if there are changes
+				if (changes.length > 0) {
+					showUpdateModal(changes);
+				}
+
+				// Update previous data for next comparison
+				previousData = JSON.parse(JSON.stringify(tournamentData));
 			}
 		}
 	}, 1000);
@@ -139,3 +237,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	document.addEventListener("keydown", handleKey);
 	startAutoUpdate();
 });
+
+// Make closeModal function globally available
+window.closeModal = closeModal;
