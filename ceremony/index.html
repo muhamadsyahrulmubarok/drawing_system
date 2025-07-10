@@ -6,23 +6,28 @@
 		<title>Ceremony Podium</title>
 		<style>
 			body {
-				min-height: 100vh;
-				margin: 0;
+				/* min-height: 100vh; */
+				/* margin: 0; */
 				font-family: "Segoe UI", Arial, sans-serif;
-				background: radial-gradient(
+				/* background: radial-gradient(
 					circle at 50% 20%,
 					#23326e 0%,
 					#0a1026 100%
-				);
-				color: #fff;
+				); */
+				background-image: url("../bg-pon.png");
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+				/* color: #fff; */
 				overflow: hidden; /* Prevent scrolling */
 			}
 			.container {
 				max-width: 1100px;
 				margin: 40px auto;
-				background: rgba(20, 30, 60, 0.85);
+				/* background: rgba(20, 30, 60, 0.85); */
 				border-radius: 18px;
-				box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+				/* box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); */
 				padding: 32px 24px;
 			}
 			h1 {
@@ -47,7 +52,7 @@
 				padding: 12px 24px;
 				border: none;
 				background: transparent;
-				color: #ffd700;
+				color: #000000;
 				font-weight: bold;
 				text-align: center;
 				cursor: pointer;
@@ -57,13 +62,13 @@
 				outline: none;
 				text-transform: uppercase;
 				letter-spacing: 1px;
-				text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+				/* text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); */
 				transition: all 0.3s ease;
 			}
-			select:hover {
+			/* select:hover {
 				color: #fff;
 				text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-			}
+			} */
 			select option {
 				background: #23326e;
 				color: #ffd700;
@@ -120,19 +125,19 @@
 				color: #fff;
 			}
 			.place.first {
-				background: rgba(255, 215, 0, 0.18);
-				border: 2px solid #ffd700;
+				background: rgba(255, 224, 46, 0.9);
+				border: 2px solid #f9dc33;
 				min-height: 340px;
 				z-index: 2;
 			}
 			.place.second {
-				background: rgba(192, 192, 192, 0.18);
+				background: rgba(198, 198, 198, 0.822);
 				border: 2px solid #c0c0c0;
 				min-height: 260px;
 				z-index: 1;
 			}
 			.place.third {
-				background: rgba(205, 127, 50, 0.18);
+				background: rgba(205, 128, 50, 0.781);
 				border: 2px solid #cd7f32;
 				min-height: 200px;
 				z-index: 1;
@@ -257,14 +262,14 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="logo">
+			<!-- <div class="logo">
 				<img
 					src="../logo.jpg"
 					class="logo-img"
 					alt="Pekan Olahraga Nusumma (PON) 2025"
 				/>
-			</div>
-			<h1>Pekan Olahraga Nusumma (PON) 2025</h1>
+			</div> -->
+			<h1 style="margin-top: 100px">Pekan Olahraga Nusumma (PON) 2025</h1>
 			<div class="ceremony-title">WINNER PODIUM</div>
 			<div class="sport-select">
 				<select id="sportSelect">
