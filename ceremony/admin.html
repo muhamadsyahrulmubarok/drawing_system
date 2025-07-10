@@ -69,7 +69,8 @@
 				margin-bottom: 6px;
 				font-size: 0.9rem;
 			}
-			input[type="text"] {
+			input[type="text"],
+			select {
 				width: 100%;
 				padding: 10px 12px;
 				border-radius: 6px;
@@ -79,10 +80,15 @@
 				font-size: 1rem;
 				box-sizing: border-box;
 			}
-			input[type="text"]:focus {
+			input[type="text"]:focus,
+			select:focus {
 				outline: none;
 				border-color: #ffd700;
 				background: rgba(255, 255, 255, 0.15);
+			}
+			select option {
+				background: #23326e;
+				color: #fff;
 			}
 			.save-btn {
 				background: #ffd700;
@@ -183,11 +189,13 @@
 				<div class="input-group">
 					<div class="input-field">
 						<label for="firstName">Winner Name</label>
-						<input
-							type="text"
-							id="firstName"
-							placeholder="Enter 1st place winner name"
-						/>
+						<select id="firstName">
+							<option value="">Select 1st place winner</option>
+							<option value="Nusumma Jatim">Nusumma Jatim</option>
+							<option value="Nusumma Jateng">Nusumma Jateng</option>
+							<option value="Nusumma Jabar">Nusumma Jabar</option>
+							<option value="Nusumma Jogja">Nusumma Jogja</option>
+						</select>
 					</div>
 					<button
 						class="save-btn"
@@ -209,11 +217,13 @@
 				<div class="input-group">
 					<div class="input-field">
 						<label for="secondName">Winner Name</label>
-						<input
-							type="text"
-							id="secondName"
-							placeholder="Enter 2nd place winner name"
-						/>
+						<select id="secondName">
+							<option value="">Select 2nd place winner</option>
+							<option value="Nusumma Jatim">Nusumma Jatim</option>
+							<option value="Nusumma Jateng">Nusumma Jateng</option>
+							<option value="Nusumma Jabar">Nusumma Jabar</option>
+							<option value="Nusumma Jogja">Nusumma Jogja</option>
+						</select>
 					</div>
 					<button
 						class="save-btn"
@@ -235,11 +245,13 @@
 				<div class="input-group">
 					<div class="input-field">
 						<label for="thirdName">Winner Name</label>
-						<input
-							type="text"
-							id="thirdName"
-							placeholder="Enter 3rd place winner name"
-						/>
+						<select id="thirdName">
+							<option value="">Select 3rd place winner</option>
+							<option value="Nusumma Jatim">Nusumma Jatim</option>
+							<option value="Nusumma Jateng">Nusumma Jateng</option>
+							<option value="Nusumma Jabar">Nusumma Jabar</option>
+							<option value="Nusumma Jogja">Nusumma Jogja</option>
+						</select>
 					</div>
 					<button
 						class="save-btn"
@@ -301,9 +313,13 @@
 					"3rd": { name: "" },
 				};
 
-				document.getElementById("firstName").value = winners["1st"].name || "";
-				document.getElementById("secondName").value = winners["2nd"].name || "";
-				document.getElementById("thirdName").value = winners["3rd"].name || "";
+				const firstNameSelect = document.getElementById("firstName");
+				const secondNameSelect = document.getElementById("secondName");
+				const thirdNameSelect = document.getElementById("thirdName");
+
+				firstNameSelect.value = winners["1st"].name || "";
+				secondNameSelect.value = winners["2nd"].name || "";
+				thirdNameSelect.value = winners["3rd"].name || "";
 
 				// Clear status messages
 				clearStatusMessages();
@@ -311,7 +327,7 @@
 
 			async function saveWinner(place, inputId) {
 				const input = document.getElementById(inputId);
-				const winnerName = input.value.trim();
+				const winnerName = input.value;
 
 				// Map place to button and status IDs
 				const placeMap = {
@@ -405,29 +421,23 @@
 			// Event listeners
 			sportSelect.addEventListener("change", loadWinners);
 
-			// Allow saving on Enter key
+			// Allow saving on change for select elements
 			document
 				.getElementById("firstName")
-				.addEventListener("keypress", function (e) {
-					if (e.key === "Enter") {
-						saveWinner("1st", "firstName");
-					}
+				.addEventListener("change", function () {
+					saveWinner("1st", "firstName");
 				});
 
 			document
 				.getElementById("secondName")
-				.addEventListener("keypress", function (e) {
-					if (e.key === "Enter") {
-						saveWinner("2nd", "secondName");
-					}
+				.addEventListener("change", function () {
+					saveWinner("2nd", "secondName");
 				});
 
 			document
 				.getElementById("thirdName")
-				.addEventListener("keypress", function (e) {
-					if (e.key === "Enter") {
-						saveWinner("3rd", "thirdName");
-					}
+				.addEventListener("change", function () {
+					saveWinner("3rd", "thirdName");
 				});
 
 			// Initialize on load
