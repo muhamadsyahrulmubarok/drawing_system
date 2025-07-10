@@ -56,7 +56,7 @@
 	font-weight: bold;
 }
 .match.champion .team {
-	color: #1976d2;
+	/* color: #1976d2; */
 }
 .team {
 	padding: 8px;

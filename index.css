@@ -135,7 +135,7 @@ h1 {
 
 .match.champion .team {
 	font-weight: bold;
-	color: #1976d2;
+	/* color: #1976d2; */
 }
 
 /* Admin Panel Styles */
