@@ -8,16 +8,20 @@
 		<link rel="stylesheet" href="index.css" />
 		<style>
 			body {
+				min-height: 100vh;
+				min-width: 100vw;
 				margin: 0;
-				padding: 0;
-				width: 100vw;
-				height: 100vh;
-				overflow: hidden;
+				overflow: hidden; /* Prevent all scrolling */
+				/* background: radial-gradient(
+					circle at 50% 20%,
+					#23326e 0%,
+					#0a1026 100%
+				); */
 				background-image: url("bg-pon.png");
 				background-size: cover;
-				background-position: center;
+				/* background-position: center; */
 				background-repeat: no-repeat;
-				background-attachment: fixed;
+				/* Deep blue gradient for high contrast with orange */
 			}
 			.container {
 				width: 100%;
@@ -171,7 +175,7 @@
 				/>
 			</div> -->
 			<!-- <h1 style="text-align: center; margin-bottom: 20px">Turnamen PON 2025</h1> -->
-			<div class="sports-grid" id="sportsContainer" style="margin-top: 50px">
+			<div class="sports-grid" id="sportsContainer" style="margin-top: 300px">
 				<!-- Sports will be dynamically inserted here -->
 			</div>
 			<div style="margin-top: 20px; display: flex; justify-content: center">
@@ -182,7 +186,7 @@
 		<script src="script.js" defer></script>
 		<script>
 			// make 33% zoom display
-			document.body.style.zoom = "75%";
+			document.body.style.zoom = "33%";
 		</script>
 	</body>
 </html>
