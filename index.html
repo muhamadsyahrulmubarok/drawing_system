@@ -12,11 +12,15 @@
 				min-width: 100vw;
 				margin: 0;
 				overflow: hidden; /* Prevent all scrolling */
-				background: radial-gradient(
+				/* background: radial-gradient(
 					circle at 50% 20%,
 					#23326e 0%,
 					#0a1026 100%
-				);
+				); */
+				background-image: url("bg-pon.png");
+				background-size: cover;
+				/* background-position: center; */
+				background-repeat: no-repeat;
 				/* Deep blue gradient for high contrast with orange */
 			}
 			.container {
@@ -80,13 +84,13 @@
 			.sport-title {
 				text-align: center;
 				margin-bottom: 15px;
-				color: #f3f6fa;
+				color: #ffffff;
 				font-size: 1.2em;
 				text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 			}
 			.sport-section {
-				background: rgba(20, 30, 60, 0.85);
-				color: #f3f6fa;
+				background: rgba(255, 140, 0, 0.85);
+				color: #ffffff;
 				padding: 20px;
 				border-radius: 16px;
 				box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.18);
@@ -102,7 +106,7 @@
 			.sport-section:hover {
 				transform: translateY(-5px);
 				box-shadow: 0 4px 20px rgba(80, 120, 200, 0.25);
-				background: rgba(20, 30, 60, 0.95);
+				background: rgba(255, 140, 0, 0.95);
 			}
 			.match {
 				background: rgba(255, 255, 255, 0.07);
@@ -161,16 +165,16 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="logo">
+			<!-- <div class="logo">
 				<div class="logo-glow"></div>
 				<img
 					src="logo.jpg"
 					alt="PON 2025 Logo"
 					style="width: 100px; height: auto"
 				/>
-			</div>
+			</div> -->
 			<!-- <h1 style="text-align: center; margin-bottom: 20px">Turnamen PON 2025</h1> -->
-			<div class="sports-grid" id="sportsContainer">
+			<div class="sports-grid" id="sportsContainer" style="margin-top: 300px">
 				<!-- Sports will be dynamically inserted here -->
 			</div>
 			<div style="margin-top: 20px; display: flex; justify-content: center">
