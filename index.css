@@ -41,7 +41,7 @@ h1 {
 	box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.18);
 	border: 1.5px solid rgba(80, 120, 200, 0.18);
 	min-width: 350px;
-	max-width: 400px;
+	max-width: 700px;
 	margin-bottom: 20px;
 	display: flex;
 	flex-direction: column;

@@ -46,15 +46,62 @@ let tournamentData = {
 // Store previous data for comparison
 let previousData = JSON.parse(JSON.stringify(tournamentData));
 
-// Initialize the tournament data
-function initTournament() {
-	// Load data from localStorage if it exists
-	const savedData = localStorage.getItem("tournamentData");
-	if (savedData) {
-		tournamentData = JSON.parse(savedData);
-		previousData = JSON.parse(JSON.stringify(tournamentData));
+// Function to fetch data from action.php
+async function fetchData() {
+	try {
+		const response = await fetch("action.php?action=read");
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		const data = await response.json();
+		// console.log("Fetched data:", data);
+
+		// Convert data.json structure to our internal structure
+		const convertedData = {
+			currentSport: tournamentData.currentSport,
+			sports: {},
+		};
+
+		if (data.sports) {
+			data.sports.forEach((sport) => {
+				if (sport.brackets && sport.brackets.length >= 3) {
+					const round1 = sport.brackets[0].matches;
+					const round2 = sport.brackets[1].matches;
+					const round3 = sport.brackets[2].matches;
+					// console.log("Processing sport:", sport.name, "round1:", round1);
+
+					convertedData.sports[sport.name] = {
+						teams: [
+							round1[0]?.team1 || "",
+							round1[1]?.team1 || "",
+							round1[0]?.team2 || "",
+							round1[1]?.team2 || "",
+						],
+						winners: {
+							match1: round2[0]?.team1 || "",
+							match2: round2[0]?.team2 || "",
+							final: round3[0]?.team1 || "",
+						},
+					};
+				}
+			});
+		}
+
+		return convertedData;
+	} catch (error) {
+		console.error("Error fetching data:", error);
+		return null;
 	}
-	updateDisplay();
+}
+
+// Initialize the tournament data
+async function initTournament() {
+	const data = await fetchData();
+	if (data) {
+		tournamentData = data;
+		previousData = JSON.parse(JSON.stringify(tournamentData));
+		updateDisplay();
+	}
 }
 
 // Update the display
@@ -108,15 +155,32 @@ function updateDisplay() {
 // Function to detect changes and find updated team names
 function detectChanges(newData) {
 	const changes = [];
+	// console.log("Detecting changes between:", newData, "and", previousData);
 
 	// Check each sport
 	Object.keys(newData.sports).forEach((sportName) => {
 		const newSport = newData.sports[sportName];
 		const oldSport = previousData.sports[sportName];
 
+		if (!oldSport) {
+			// New sport added
+			newSport.teams.forEach((team, index) => {
+				if (team) {
+					changes.push({
+						type: "team",
+						name: team,
+						sport: sportName,
+						position: `Team ${index + 1}`,
+					});
+				}
+			});
+			return;
+		}
+
 		// Check teams
 		newSport.teams.forEach((team, index) => {
 			if (team && team !== oldSport.teams[index]) {
+				// console.log("Team change detected:", team, "in", sportName);
 				changes.push({
 					type: "team",
 					name: team,
@@ -132,6 +196,12 @@ function detectChanges(newData) {
 				newSport.winners[winnerKey] &&
 				newSport.winners[winnerKey] !== oldSport.winners[winnerKey]
 			) {
+				// console.log(
+				// 	"Winner change detected:",
+				// 	newSport.winners[winnerKey],
+				// 	"in",
+				// 	sportName
+				// );
 				changes.push({
 					type: "winner",
 					name: newSport.winners[winnerKey],
@@ -145,12 +215,15 @@ function detectChanges(newData) {
 		});
 	});
 
+	// console.log("Changes detected:", changes);
 	return changes;
 }
 
 // Function to show modal with confetti
 function showUpdateModal(changes) {
 	if (changes.length === 0) return;
+
+	// console.log("Showing modal for changes:", changes);
 
 	const modal = document.getElementById("updateModal");
 	const modalTeamName = document.getElementById("modalTeamName");
@@ -173,54 +246,68 @@ function showUpdateModal(changes) {
 
 // Function to trigger confetti
 function triggerConfetti() {
-	confetti({
-		particleCount: 100,
-		spread: 70,
-		origin: { y: 0.6 },
-		colors: ["#ffd700", "#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"],
-	});
+	if (typeof confetti !== "undefined") {
+		confetti({
+			particleCount: 100,
+			spread: 70,
+			origin: { y: 0.6 },
+			colors: [
+				"#ffd700",
+				"#ff6b6b",
+				"#4ecdc4",
+				"#45b7d1",
+				"#96ceb4",
+				"#feca57",
+			],
+		});
+	}
 }
 
 // Function to close modal
 function closeModal() {
 	const modal = document.getElementById("updateModal");
-	modal.classList.remove("show");
+	if (modal) {
+		modal.classList.remove("show");
+	}
 }
 
 // Handle keyboard navigation
-function handleKey(e) {
+async function handleKey(e) {
 	if (e.key === "ArrowRight") {
 		const currentIndex = allowedSports.indexOf(tournamentData.currentSport);
 		const nextIndex = (currentIndex + 1) % allowedSports.length;
 		tournamentData.currentSport = allowedSports[nextIndex];
-		localStorage.setItem("tournamentData", JSON.stringify(tournamentData));
 		updateDisplay();
 	} else if (e.key === "ArrowLeft") {
 		const currentIndex = allowedSports.indexOf(tournamentData.currentSport);
 		const prevIndex =
 			(currentIndex - 1 + allowedSports.length) % allowedSports.length;
 		tournamentData.currentSport = allowedSports[prevIndex];
-		localStorage.setItem("tournamentData", JSON.stringify(tournamentData));
 		updateDisplay();
 	}
 }
 
 // Check for updates every second
-function startAutoUpdate() {
-	setInterval(() => {
-		const savedData = localStorage.getItem("tournamentData");
-		if (savedData) {
-			const newData = JSON.parse(savedData);
+async function startAutoUpdate() {
+	setInterval(async () => {
+		const newData = await fetchData();
+		if (newData) {
+			// console.log("Converted data:", newData);
+			// console.log("Current tournament data:", tournamentData);
+
 			if (JSON.stringify(newData) !== JSON.stringify(tournamentData)) {
+				// console.log("Data changed, detecting changes...");
 				// Detect changes before updating
 				const changes = detectChanges(newData);
 
+				// console.log("Changes detected:", changes);
 				// Update the data
 				tournamentData = newData;
 				updateDisplay();
 
 				// Show modal if there are changes
 				if (changes.length > 0) {
+					// console.log("Showing modal for changes:", changes);
 					showUpdateModal(changes);
 				}
 

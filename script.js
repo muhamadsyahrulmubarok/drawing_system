@@ -1,4 +1,4 @@
-// Load tournament data from data.json
+// Load tournament data from data.json via action.php
 let tournamentData = {
 	currentSport: "Tarik Tambang",
 	sports: {
@@ -40,29 +40,150 @@ let tournamentData = {
 // Store previous data for comparison
 let previousData = JSON.parse(JSON.stringify(tournamentData));
 
-// Initialize the tournament data
-function initTournament() {
-	// Load data from localStorage if it exists
-	const savedData = localStorage.getItem("tournamentData");
-	if (savedData) {
-		tournamentData = JSON.parse(savedData);
-		previousData = JSON.parse(JSON.stringify(tournamentData));
+// Function to fetch data from action.php
+async function fetchData() {
+	try {
+		const response = await fetch("action.php?action=read");
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		const data = await response.json();
+		console.log("Fetched data:", data);
+
+		// Convert data.json structure to our internal structure
+		if (data.sports) {
+			data.sports.forEach((sport) => {
+				if (sport.brackets && sport.brackets.length >= 3) {
+					const round1 = sport.brackets[0].matches;
+					const round2 = sport.brackets[1].matches;
+					const round3 = sport.brackets[2].matches;
+					console.log("Processing sport:", sport.name, "round1:", round1);
+
+					tournamentData.sports[sport.name] = {
+						teams: [
+							round1[0]?.team1 || "",
+							round1[1]?.team1 || "",
+							round1[0]?.team2 || "",
+							round1[1]?.team2 || "",
+						],
+						winners: {
+							match1: round2[0]?.team1 || "",
+							match2: round2[0]?.team2 || "",
+							final: round3[0]?.team1 || "",
+						},
+					};
+				}
+			});
+		}
+
+		return data;
+	} catch (error) {
+		console.error("Error fetching data:", error);
+		return null;
 	}
+}
+
+// Function to save data to action.php
+async function saveData() {
+	try {
+		// Convert our internal structure to data.json structure
+		const dataToSave = {
+			sports: Object.keys(tournamentData.sports).map((sportName) => {
+				const sportData = tournamentData.sports[sportName];
+				return {
+					name: sportName,
+					brackets: [
+						{
+							round: 1,
+							matches: [
+								{
+									team1: sportData.teams[0] || "",
+									team2: sportData.teams[2] || "",
+								},
+								{
+									team1: sportData.teams[1] || "",
+									team2: sportData.teams[3] || "",
+								},
+							],
+						},
+						{
+							round: 2,
+							matches: [
+								{
+									team1: sportData.winners.match1 || "Winner 1",
+									team2: sportData.winners.match2 || "Winner 2",
+								},
+							],
+						},
+						{
+							round: 3,
+							matches: [
+								{
+									team1: sportData.winners.final || "Champion",
+								},
+							],
+						},
+					],
+				};
+			}),
+		};
+
+		const response = await fetch("action.php?action=write", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(dataToSave),
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+
+		const result = await response.json();
+		return result.status === "success";
+	} catch (error) {
+		console.error("Error saving data:", error);
+		return false;
+	}
+}
+
+// Initialize the tournament data
+async function initTournament() {
+	await fetchData();
+	previousData = JSON.parse(JSON.stringify(tournamentData));
 	updateDisplay();
 }
 
 // Function to detect changes and find updated team names
 function detectChanges(newData) {
 	const changes = [];
+	console.log("Detecting changes between:", newData, "and", previousData);
 
 	// Check each sport
 	Object.keys(newData.sports).forEach((sportName) => {
 		const newSport = newData.sports[sportName];
 		const oldSport = previousData.sports[sportName];
 
+		if (!oldSport) {
+			// New sport added
+			newSport.teams.forEach((team, index) => {
+				if (team) {
+					changes.push({
+						type: "team",
+						name: team,
+						sport: sportName,
+						position: `Team ${index + 1}`,
+					});
+				}
+			});
+			return;
+		}
+
 		// Check teams
 		newSport.teams.forEach((team, index) => {
 			if (team && team !== oldSport.teams[index]) {
+				console.log("Team change detected:", team, "in", sportName);
 				changes.push({
 					type: "team",
 					name: team,
@@ -78,6 +199,12 @@ function detectChanges(newData) {
 				newSport.winners[winnerKey] &&
 				newSport.winners[winnerKey] !== oldSport.winners[winnerKey]
 			) {
+				console.log(
+					"Winner change detected:",
+					newSport.winners[winnerKey],
+					"in",
+					sportName
+				);
 				changes.push({
 					type: "winner",
 					name: newSport.winners[winnerKey],
@@ -91,12 +218,15 @@ function detectChanges(newData) {
 		});
 	});
 
+	console.log("Changes detected:", changes);
 	return changes;
 }
 
 // Function to show modal with confetti
 function showUpdateModal(changes) {
 	if (changes.length === 0) return;
+
+	console.log("Showing modal for changes:", changes);
 
 	// Create modal if it doesn't exist
 	let modal = document.getElementById("updateModal");
@@ -254,15 +384,15 @@ function closeModal() {
 }
 
 // Change sport in admin panel
-function changeSport() {
+async function changeSport() {
 	const sportSelect = document.getElementById("sportSelect");
 	tournamentData.currentSport = sportSelect.value;
-	localStorage.setItem("tournamentData", JSON.stringify(tournamentData));
+	await saveData();
 	updateDisplay();
 }
 
 // Save teams from admin panel
-function saveTeams() {
+async function saveTeams() {
 	console.log("Saving teams...");
 	// Read values from <select> elements for team inputs
 	const teams = [
@@ -274,13 +404,17 @@ function saveTeams() {
 
 	console.log("Teams to save:", teams);
 	tournamentData.sports[tournamentData.currentSport].teams = teams;
-	localStorage.setItem("tournamentData", JSON.stringify(tournamentData));
-	updateDisplay();
-	alert("Teams saved successfully!");
+	const success = await saveData();
+	if (success) {
+		updateDisplay();
+		alert("Teams saved successfully!");
+	} else {
+		alert("Error saving teams!");
+	}
 }
 
 // Save match results from admin panel
-function saveResults() {
+async function saveResults() {
 	console.log("Saving results...");
 	const winners = {
 		match1: document.getElementById("winner1").value,
@@ -290,9 +424,13 @@ function saveResults() {
 
 	console.log("Winners to save:", winners);
 	tournamentData.sports[tournamentData.currentSport].winners = winners;
-	localStorage.setItem("tournamentData", JSON.stringify(tournamentData));
-	updateDisplay();
-	alert("Results saved successfully!");
+	const success = await saveData();
+	if (success) {
+		updateDisplay();
+		alert("Results saved successfully!");
+	} else {
+		alert("Error saving results!");
+	}
 }
 
 // Update the display on both pages
@@ -451,21 +589,56 @@ function updateMainDisplay() {
 }
 
 // Check for updates every second
-function startAutoUpdate() {
-	setInterval(() => {
-		const savedData = localStorage.getItem("tournamentData");
-		if (savedData) {
-			const newData = JSON.parse(savedData);
-			if (JSON.stringify(newData) !== JSON.stringify(tournamentData)) {
-				// Detect changes before updating
-				const changes = detectChanges(newData);
+async function startAutoUpdate() {
+	setInterval(async () => {
+		const newData = await fetchData();
+		if (newData) {
+			// Convert the fetched data to our internal structure for comparison
+			const convertedData = {
+				currentSport: tournamentData.currentSport,
+				sports: {},
+			};
 
+			if (newData.sports) {
+				newData.sports.forEach((sport) => {
+					if (sport.brackets && sport.brackets.length >= 3) {
+						const round1 = sport.brackets[0].matches;
+						const round2 = sport.brackets[1].matches;
+						const round3 = sport.brackets[2].matches;
+
+						convertedData.sports[sport.name] = {
+							teams: [
+								round1[0]?.team1 || "",
+								round1[1]?.team1 || "",
+								round1[0]?.team2 || "",
+								round1[1]?.team2 || "",
+							],
+							winners: {
+								match1: round2[0]?.team1 || "",
+								match2: round2[0]?.team2 || "",
+								final: round3[0]?.team1 || "",
+							},
+						};
+					}
+				});
+			}
+
+			console.log("Converted data:", convertedData);
+			console.log("Current tournament data:", tournamentData);
+
+			if (JSON.stringify(convertedData) !== JSON.stringify(tournamentData)) {
+				console.log("Data changed, detecting changes...");
+				// Detect changes before updating
+				const changes = detectChanges(convertedData);
+
+				console.log("Changes detected:", changes);
 				// Update the data
-				tournamentData = newData;
+				tournamentData = convertedData;
 				updateDisplay();
 
 				// Show modal if there are changes
 				if (changes.length > 0) {
+					console.log("Showing modal for changes:", changes);
 					showUpdateModal(changes);
 				}
 
