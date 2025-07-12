@@ -180,6 +180,65 @@
 				</select>
 			</div>
 
+			<!-- Overall Winner Section -->
+			<div
+				class="winner-section"
+				style="border-left-color: #ffd700; background: rgba(255, 215, 0, 0.1)"
+			>
+				<div class="winner-header">
+					<span class="medal-icon">🏆</span>
+					<span class="place-title">Overall Winner (Juara Umum)</span>
+				</div>
+				<div class="input-group">
+					<div class="input-field">
+						<label for="overallWinnerName">Winner Name</label>
+						<select id="overallWinnerName">
+							<option value="">Select overall winner</option>
+							<option value="Nusumma Jatim">Nusumma Jatim</option>
+							<option value="Nusumma Jateng">Nusumma Jateng</option>
+							<option value="Nusumma Jabar">Nusumma Jabar</option>
+							<option value="Nusumma Jogja">Nusumma Jogja</option>
+						</select>
+					</div>
+					<div class="input-field">
+						<label for="overallWinnerRegion">Region</label>
+						<input
+							type="text"
+							id="overallWinnerRegion"
+							placeholder="Enter region name"
+						/>
+					</div>
+				</div>
+				<div class="input-group">
+					<div class="input-field">
+						<label for="goldMedals">Gold Medals</label>
+						<input type="number" id="goldMedals" min="0" value="0" />
+					</div>
+					<div class="input-field">
+						<label for="silverMedals">Silver Medals</label>
+						<input type="number" id="silverMedals" min="0" value="0" />
+					</div>
+					<div class="input-field">
+						<label for="bronzeMedals">Bronze Medals</label>
+						<input type="number" id="bronzeMedals" min="0" value="0" />
+					</div>
+					<div class="input-field">
+						<label for="totalScore">Total Score</label>
+						<input type="number" id="totalScore" min="0" value="0" />
+					</div>
+				</div>
+				<div class="input-group">
+					<button
+						class="save-btn"
+						id="saveOverallWinner"
+						onclick="saveOverallWinner()"
+					>
+						Save Overall Winner
+					</button>
+				</div>
+				<div class="status-message" id="statusOverallWinner"></div>
+			</div>
+
 			<!-- 1st Place Section -->
 			<div class="winner-section">
 				<div class="winner-header">
@@ -264,7 +323,12 @@
 				<div class="status-message" id="statusThird"></div>
 			</div>
 
-			<a href="index.html" class="back-link">&larr; Back to Ceremony List</a>
+			<div style="text-align: center; margin-top: 30px">
+				<a href="index.html" class="back-link">&larr; Back to Ceremony List</a>
+				<a href="winner.html" class="back-link" style="margin-left: 20px"
+					>🏆 View Winner Page</a
+				>
+			</div>
 		</div>
 
 		<script>
@@ -321,8 +385,104 @@
 				secondNameSelect.value = winners["2nd"].name || "";
 				thirdNameSelect.value = winners["3rd"].name || "";
 
+				// Load overall winner data
+				loadOverallWinner(data);
+
 				// Clear status messages
 				clearStatusMessages();
+			}
+
+			async function loadOverallWinner(data) {
+				const winner = data.winner || {
+					name: "",
+					region: "",
+					totalScore: 0,
+					goldMedals: 0,
+					silverMedals: 0,
+					bronzeMedals: 0,
+					totalMedals: 0,
+				};
+
+				document.getElementById("overallWinnerName").value = winner.name || "";
+				document.getElementById("overallWinnerRegion").value =
+					winner.region || "";
+				document.getElementById("goldMedals").value = winner.goldMedals || 0;
+				document.getElementById("silverMedals").value =
+					winner.silverMedals || 0;
+				document.getElementById("bronzeMedals").value =
+					winner.bronzeMedals || 0;
+				document.getElementById("totalScore").value = winner.totalScore || 0;
+			}
+
+			async function saveOverallWinner() {
+				const saveBtn = document.getElementById("saveOverallWinner");
+				const statusElement = document.getElementById("statusOverallWinner");
+
+				// Update button state
+				saveBtn.disabled = true;
+				saveBtn.classList.add("saving");
+				saveBtn.textContent = "Saving...";
+
+				try {
+					// Get current data
+					const data = await getData();
+					if (!data) {
+						throw new Error("Failed to load current data");
+					}
+
+					// Get form values
+					const winnerName = document.getElementById("overallWinnerName").value;
+					const region = document.getElementById("overallWinnerRegion").value;
+					const goldMedals =
+						parseInt(document.getElementById("goldMedals").value) || 0;
+					const silverMedals =
+						parseInt(document.getElementById("silverMedals").value) || 0;
+					const bronzeMedals =
+						parseInt(document.getElementById("bronzeMedals").value) || 0;
+					const totalScore =
+						parseInt(document.getElementById("totalScore").value) || 0;
+					const totalMedals = goldMedals + silverMedals + bronzeMedals;
+
+					// Update winner data
+					data.winner = {
+						name: winnerName,
+						region: region,
+						totalScore: totalScore,
+						goldMedals: goldMedals,
+						silverMedals: silverMedals,
+						bronzeMedals: bronzeMedals,
+						totalMedals: totalMedals,
+					};
+
+					// Save the data
+					const success = await setData(data);
+
+					if (success) {
+						showStatus(
+							statusElement,
+							"Overall winner saved successfully!",
+							"success"
+						);
+						// Clear status after 3 seconds
+						setTimeout(() => {
+							clearStatus(statusElement);
+						}, 3000);
+					} else {
+						throw new Error("Failed to save data");
+					}
+				} catch (error) {
+					console.error("Error saving overall winner:", error);
+					showStatus(
+						statusElement,
+						"Error saving overall winner. Please try again.",
+						"error"
+					);
+				} finally {
+					// Reset button state
+					saveBtn.disabled = false;
+					saveBtn.classList.remove("saving");
+					saveBtn.textContent = "Save Overall Winner";
+				}
 			}
 
 			async function saveWinner(place, inputId) {
@@ -439,6 +599,30 @@
 				.addEventListener("change", function () {
 					saveWinner("3rd", "thirdName");
 				});
+
+			// Overall winner auto-save event listeners
+			document
+				.getElementById("overallWinnerName")
+				.addEventListener("change", saveOverallWinner);
+			document
+				.getElementById("overallWinnerRegion")
+				.addEventListener("input", function () {
+					// Debounce the input to avoid too many saves
+					clearTimeout(this.saveTimeout);
+					this.saveTimeout = setTimeout(saveOverallWinner, 1000);
+				});
+			document
+				.getElementById("goldMedals")
+				.addEventListener("change", saveOverallWinner);
+			document
+				.getElementById("silverMedals")
+				.addEventListener("change", saveOverallWinner);
+			document
+				.getElementById("bronzeMedals")
+				.addEventListener("change", saveOverallWinner);
+			document
+				.getElementById("totalScore")
+				.addEventListener("change", saveOverallWinner);
 
 			// Initialize on load
 			loadWinners();

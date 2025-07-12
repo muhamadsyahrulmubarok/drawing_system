@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Juara Umum PON 2025</title>
+		<style>
+			body {
+				margin: 0;
+				font-family: "Segoe UI", Arial, sans-serif;
+				background-image: url("../bg-pon.png");
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+				overflow: hidden;
+				color: #fff;
+			}
+
+			.container {
+				max-width: 1200px;
+				margin: 40px auto;
+				padding: 32px 24px;
+				text-align: center;
+			}
+
+			.title {
+				font-size: 3.5rem;
+				font-weight: bold;
+				margin-bottom: 20px;
+				text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+				color: #ffd700;
+				letter-spacing: 3px;
+			}
+
+			.subtitle {
+				font-size: 1.5rem;
+				margin-bottom: 50px;
+				color: #fff;
+				text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+			}
+
+			.winner-card {
+				background: linear-gradient(
+					135deg,
+					rgba(255, 215, 0, 0.9) 0%,
+					rgba(255, 224, 46, 0.8) 100%
+				);
+				border-radius: 25px;
+				padding: 60px 40px;
+				margin: 40px auto;
+				max-width: 800px;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+				border: 5px solid #ffd700;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.winner-card::before {
+				content: "";
+				position: absolute;
+				top: -50%;
+				left: -50%;
+				width: 200%;
+				height: 200%;
+				background: linear-gradient(
+					45deg,
+					transparent,
+					rgba(255, 255, 255, 0.1),
+					transparent
+				);
+				animation: shine 3s infinite;
+			}
+
+			@keyframes shine {
+				0% {
+					transform: translateX(-100%) translateY(-100%) rotate(45deg);
+				}
+				100% {
+					transform: translateX(100%) translateY(100%) rotate(45deg);
+				}
+			}
+
+			.winner-content {
+				position: relative;
+				z-index: 2;
+			}
+
+			.winner-name {
+				font-size: 4rem;
+				font-weight: bold;
+				color: #23326e;
+				margin-bottom: 20px;
+				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+			}
+
+			.winner-region {
+				font-size: 2rem;
+				color: #23326e;
+				margin-bottom: 30px;
+				font-weight: 600;
+			}
+
+			.winner-score {
+				font-size: 2.5rem;
+				color: #23326e;
+				font-weight: bold;
+				background: rgba(255, 255, 255, 0.3);
+				padding: 15px 30px;
+				border-radius: 15px;
+				display: inline-block;
+				margin-top: 20px;
+			}
+
+			.trophy-icon {
+				font-size: 6rem;
+				margin-bottom: 20px;
+				display: block;
+				animation: bounce 2s infinite;
+			}
+
+			@keyframes bounce {
+				0%,
+				20%,
+				50%,
+				80%,
+				100% {
+					transform: translateY(0);
+				}
+				40% {
+					transform: translateY(-20px);
+				}
+				60% {
+					transform: translateY(-10px);
+				}
+			}
+
+			.stats-container {
+				display: flex;
+				justify-content: center;
+				gap: 40px;
+				margin-top: 50px;
+				flex-wrap: wrap;
+			}
+
+			.stat-item {
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 15px;
+				padding: 20px;
+				min-width: 150px;
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+			}
+
+			.stat-number {
+				font-size: 2.5rem;
+				font-weight: bold;
+				color: #ffd700;
+				display: block;
+			}
+
+			.stat-label {
+				font-size: 1rem;
+				color: #fff;
+				margin-top: 5px;
+			}
+
+			.loading {
+				font-size: 2rem;
+				color: #ffd700;
+				text-align: center;
+				margin-top: 100px;
+			}
+
+			.no-winner {
+				font-size: 2rem;
+				color: #fff;
+				text-align: center;
+				margin-top: 100px;
+				background: rgba(255, 255, 255, 0.1);
+				padding: 40px;
+				border-radius: 20px;
+				backdrop-filter: blur(10px);
+			}
+
+			@media (max-width: 768px) {
+				.title {
+					font-size: 2.5rem;
+				}
+
+				.winner-name {
+					font-size: 2.5rem;
+				}
+
+				.winner-region {
+					font-size: 1.5rem;
+				}
+
+				.winner-score {
+					font-size: 1.8rem;
+				}
+
+				.stats-container {
+					flex-direction: column;
+					align-items: center;
+				}
+
+				.stat-item {
+					width: 200px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div style="text-align: center; margin-bottom: 30px">
+				<a
+					href="index.html"
+					style="
+						color: #ffd700;
+						text-decoration: none;
+						font-weight: bold;
+						font-size: 1.1rem;
+						padding: 8px 16px;
+						border: 2px solid #ffd700;
+						border-radius: 8px;
+						transition: all 0.3s ease;
+						display: inline-block;
+					"
+					onmouseover="this.style.background='#ffd700'; this.style.color='#23326e';"
+					onmouseout="this.style.background='transparent'; this.style.color='#ffd700';"
+					>← Back to Ceremony</a
+				>
+				<a
+					href="admin.html"
+					style="
+						color: #ffd700;
+						text-decoration: none;
+						margin-left: 15px;
+						font-weight: bold;
+						font-size: 1.1rem;
+						padding: 8px 16px;
+						border: 2px solid #ffd700;
+						border-radius: 8px;
+						transition: all 0.3s ease;
+						display: inline-block;
+					"
+					onmouseover="this.style.background='#ffd700'; this.style.color='#23326e';"
+					onmouseout="this.style.background='transparent'; this.style.color='#ffd700';"
+					>⚙️ Admin</a
+				>
+			</div>
+			<h1 class="title">JUARA UMUM PON 2025</h1>
+			<p class="subtitle">Pekan Olahraga Nasional 2025</p>
+
+			<div id="winnerDisplay">
+				<div class="loading">Loading winner data...</div>
+			</div>
+		</div>
+
+		<script>
+			let currentWinner = null;
+
+			function loadWinnerData() {
+				fetch("action.php?action=read")
+					.then((response) => response.json())
+					.then((data) => {
+						if (data.winner && data.winner.name) {
+							displayWinner(data.winner);
+						} else {
+							displayNoWinner();
+						}
+					})
+					.catch((error) => {
+						console.error("Error loading winner data:", error);
+						displayNoWinner();
+					});
+			}
+
+			function displayWinner(winner) {
+				if (currentWinner && currentWinner.name === winner.name) {
+					return; // No need to update if same winner
+				}
+
+				currentWinner = winner;
+
+				const winnerDisplay = document.getElementById("winnerDisplay");
+				winnerDisplay.innerHTML = `
+                <div class="winner-card">
+                    <div class="winner-content">
+                        <span class="trophy-icon">🏆</span>
+                        <div class="winner-name">${winner.name}</div>
+                    </div>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number">${
+													winner.goldMedals || 0
+												}</span>
+                        <span class="stat-label">Gold Medals</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${
+													winner.silverMedals || 0
+												}</span>
+                        <span class="stat-label">Silver Medals</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${
+													winner.bronzeMedals || 0
+												}</span>
+                        <span class="stat-label">Bronze Medals</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${
+													winner.totalMedals || 0
+												}</span>
+                        <span class="stat-label">Total Medals</span>
+                    </div>
+                </div>
+            `;
+			}
+
+			function displayNoWinner() {
+				const winnerDisplay = document.getElementById("winnerDisplay");
+				winnerDisplay.innerHTML = `
+                <div class="no-winner">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🏆</div>
+                    <div>Winner data not yet available</div>
+                    <div style="font-size: 1rem; margin-top: 10px; opacity: 0.8;">
+                        Please check back later or contact administrator
+                    </div>
+                </div>
+            `;
+			}
+
+			// Load data immediately
+			loadWinnerData();
+
+			// Auto-update every 5 seconds
+			setInterval(loadWinnerData, 5000);
+
+			// Also update when window gains focus
+			window.addEventListener("focus", loadWinnerData);
+		</script>
+	</body>
+</html>
