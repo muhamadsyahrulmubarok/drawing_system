@@ -221,8 +221,26 @@
 			</div>
 		</div>
 
+		<!-- Confetti Library -->
+		<script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+
 		<script>
 			let currentWinner = null;
+
+			function triggerConfetti() {
+				// Check if confetti library is loaded
+				if (typeof confetti !== "undefined") {
+					confetti({
+						particleCount: 100,
+						spread: 70,
+						origin: { y: 0.6 },
+						colors: ["#ffd700", "#ffed4e", "#fff", "#ff6b6b", "#4ecdc4"],
+						gravity: 0.8,
+						scalar: 1.2,
+						ticks: 200,
+					});
+				}
+			}
 
 			function loadWinnerData() {
 				fetch("action.php?action=read")
@@ -246,6 +264,9 @@
 				}
 
 				currentWinner = winner;
+
+				// Trigger confetti effect for new winner
+				triggerConfetti();
 
 				const winnerDisplay = document.getElementById("winnerDisplay");
 				winnerDisplay.innerHTML = `
